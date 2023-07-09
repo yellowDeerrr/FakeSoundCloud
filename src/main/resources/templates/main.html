@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Profile</title>
+    <style>
+        body{
+            background-color: #161719;
+        }
+        .thumb figure {
+            width: 10%;
+            margin: 1%;
+            display: inline-block;
+        }
+
+        .thumb img {
+            border: 2px solid #161719;
+            border-radius: 6%;
+            width: 155px;
+            height: 155px;
+        }
+
+        .thumb figcaption {
+            text-align: center;
+            font-family: cursive;
+            font-style: normal;
+        }
+
+        a{
+            text-decoration: none;
+            color: #606061;
+        }
+
+        #songName{
+            color: #b8b8b8;
+        }
+
+        .symbolLike{
+            color: #9999;
+        }
+        h1{
+            text-align: left;
+            font-family: cursive;
+            font-style: normal;
+            color: white;
+            font-size: 26px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="thumb">
+    <div>
+        <h1>Most popular songs</h1>
+    </div>
+    <figure th:each="song : ${songs}">
+        <a th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}">
+            <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
+        </a>
+        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}" id="songName"></a></figcaption>
+        <figcaption><a th:text="${song.author}" th:href="@{'http://localhost:8080/' + ${song.author}}"></a></figcaption>
+        <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>
+    </figure>
+    <p th:text="${errorMessage}"></p>
+</div>
+</body>
+</html>
