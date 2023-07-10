@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Мій сайт</title>
+  <style>
+    .container {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .image {
+      flex: 0 0 auto;
+      margin-right: 20px;
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .player {
+      margin-top: 10px;
+    }
+
+    img {
+      border: 2px solid #161719;
+      border-radius: 6%;
+      width: 185px;
+      height: 185px;
+    }
+
+    body {
+      text-align: center;
+      font-family: cursive;
+      font-style: normal;
+      background-color: #161719;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .songName {
+      color: #b8b8b8;
+      text-align: right;
+      font-weight: 470;
+      font-size: 30px;
+      margin: 10px 0 8px 0;
+      line-height: 1;
+    }
+
+    .author {
+      color: #8b8b8b;
+      margin: 0 0 5px 0;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    .symbolLike {
+      color: #9999;
+      margin: 0;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+<div th:each="song : ${song}">
+  <div class="container">
+    <div class="image">
+      <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
+    </div>
+    <div class="text">
+      <h3 th:text="${song.songName}" class="songName"></h3>
+      <a th:text="${song.author}" th:href="@{'http://localhost:8080/@' + ${song.author}}" class="author"></a>
+      <p th:text="'♡' + ${song.likes}" class="symbolLike"></p>
+    </div>
+  </div>
+  <div class="container player">
+    <audio controls>
+      <source th:src="'data:audio/mpeg;base64,' + ${song.base64Song}" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+<p th:text="${errorMessage}"></p>
+</body>
+</html>

@@ -57,11 +57,11 @@
         <h1>Most popular songs</h1>
     </div>
     <figure th:each="song : ${songs}">
-        <a th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}">
+        <a th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}">
             <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
         </a>
-        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
-        <figcaption><a th:text="${song.author}" th:href="@{'http://localhost:8080/' + ${song.author}}" class="author"></a></figcaption>
+        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
+        <figcaption><a th:text="${song.author}" th:href="@{'http://localhost:8080/@' + ${song.author}}" class="author"></a></figcaption>
         <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>
     </figure>
     <p th:text="${errorMessage}"></p>
@@ -71,11 +71,11 @@
         <h1>Random songs</h1>
     </div>
     <figure th:each="song : ${songs}">
-        <a th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}">
+        <a th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}">
             <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
         </a>
-        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
-        <figcaption><a th:text="${song.author}" th:href="@{'http://localhost:8080/' + ${song.author}}"></a></figcaption>
+        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
+        <figcaption><a th:text="${song.author}" th:href="@{'http://localhost:8080/@' + ${song.author}}"></a></figcaption>
         <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>
     </figure>
     <p th:text="${errorMessage}"></p>

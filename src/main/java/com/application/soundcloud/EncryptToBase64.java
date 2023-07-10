@@ -7,14 +7,25 @@ import java.util.Base64;
 import java.util.List;
 
 public class EncryptToBase64 {
-    public static void encrypteTracks(List<Tracks> songs){
+    public static void encrypteTracksImageAndSongToBase64(List<Tracks> songs){
         for (Tracks song : songs) {
-            String base64Image = Base64.getEncoder().encodeToString(song.getSongByteCode());
+            String base64Image = Base64.getEncoder().encodeToString(song.getAvatarSongByteCode());
             song.setBase64Image(base64Image);
+
+            String base64Song = Base64.getEncoder().encodeToString(song.getSongByteCode());
+            song.setBase64Song(base64Song);
         }
     }
 
-    public static void encrypteUser(Users user){
+    public static void encrypteTrackImageAndSongToBase64(Tracks song){
+        String base64Image = Base64.getEncoder().encodeToString(song.getAvatarSongByteCode());
+        song.setBase64Image(base64Image);
+
+        String base64Song = Base64.getEncoder().encodeToString(song.getSongByteCode());
+        song.setBase64Song(base64Song);
+    }
+
+    public static void encrypteUserAvatarToBase64(Users user){
         String base64Image = Base64.getEncoder().encodeToString(user.getAvatarByteCode());
         user.setBase64Image(base64Image);
     }

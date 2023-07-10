@@ -12,22 +12,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-import static com.application.soundcloud.EncryptToBase64.encrypteTracks;
-import static com.application.soundcloud.EncryptToBase64.encrypteUser;
+import static com.application.soundcloud.EncryptToBase64.*;
 
 @Controller
-public class userAccount {
+public class UserAccount {
     @Autowired
     private TracksRepository tracksRepository;
     @Autowired
     private UsersRepository usersRepository;
-    @GetMapping("/{accountName}")
+    @GetMapping("/@{accountName}")
     public String getPageAccountName(@PathVariable String accountName, Model model){
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
         Users user = usersRepository.findByUsername(accountName);
         if (user != null){
-            encrypteUser(user);
-            encrypteTracks(tracksList);
+            encrypteUserAvatarToBase64(user);
+            encrypteTracksImageAndSongToBase64(tracksList);
             model.addAttribute("user", user);
             if (!tracksList.isEmpty()){
                 model.addAttribute("songs", tracksList);
@@ -35,7 +34,7 @@ public class userAccount {
                 model.addAttribute("nullSong", "Author hasn't songs");
             }
         }else{
-            model.addAttribute("nullSong", "Account isn't exist");
+            model.addAttribute("errorMessage", "Account isn't exist");
         }
 
 

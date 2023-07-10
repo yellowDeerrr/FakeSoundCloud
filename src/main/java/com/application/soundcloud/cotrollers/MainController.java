@@ -17,8 +17,7 @@ public class MainController {
     @GetMapping("/")
     public String getMainPage(Model model) {
         List<Tracks> songs = tracksRepository.findAll();
-        EncryptToBase64.encrypteTracks(songs);
-
+        EncryptToBase64.encrypteTracksImageAndSongToBase64(songs);
         // choose first 8 elements
         List<Tracks> first8Songs = songs.subList(0, Math.min(songs.size(), 8));
 

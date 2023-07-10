@@ -18,10 +18,11 @@ public class Tracks {
     private String author;
     private int likes;
     private Timestamp date;
-    private String songKey;
+    private String songKey; // for identification song in playlist (songs haven't unique name solution - key)
     private byte[] songByteCode;
     private byte[] avatarSongByteCode;
     private String base64Image;
+    private String base64Song;
 
     public Tracks() {
     }
@@ -106,5 +107,13 @@ public class Tracks {
 
     public void setBase64Image(String base64Image) {
         this.base64Image = base64Image;
+    }
+
+    public String getBase64Song() {
+        return base64Song;
+    }
+
+    public void setBase64Song(String base64Song) {
+        this.base64Song = base64Song;
     }
 }

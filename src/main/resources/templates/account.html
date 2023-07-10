@@ -67,10 +67,10 @@
 </div>
 <div class="thumb">
     <figure th:each="song : ${songs}">
-        <a th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}">
+        <a th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}">
             <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
         </a>
-        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
+        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
         <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>
     </figure>
     <p th:text="${nullSong}" class="font" id="nullSong"></p>
