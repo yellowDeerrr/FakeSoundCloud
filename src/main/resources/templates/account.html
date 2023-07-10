@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tracks</title>
 </head>
-<body>
+<style>
+    #avatar{
+        border: 2px solid #161719;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-left: 50px;
+    }
+    body{
+        background-color: #161719;
+    }
+    .thumb figure {
+        width: 10%;
+        margin: 1%;
+        display: inline-block;
+    }
 
+    .thumb img {
+        border: 2px solid #161719;
+        border-radius: 6%;
+        width: 155px;
+        height: 155px;
+    }
+
+    .thumb figcaption {
+        text-align: center;
+        font-family: cursive;
+        font-style: normal;
+    }
+
+    a{
+        text-decoration: none;
+        color: #606061;
+    }
+
+    .songName{
+        color: #b8b8b8;
+    }
+
+    .symbolLike{
+        color: #9999;
+    }
+    .font{
+        font-family: cursive;
+        font-style: normal;
+    }
+    #accountName{
+        text-align: left;
+        font-size: 26px;
+        color: #f8f8f8;
+        margin-left: 15px;
+    }
+    #nullSong{
+        color: #b8b8b8;
+    }
+</style>
+<body>
+<div th:each="user : ${user}">
+    <img th:src="'data:image/jpeg;base64,' + ${user.base64Image}" id="avatar">
+    <h1 th:text="${user.username}" class="font" id="accountName"></h1>
+</div>
+<div class="thumb">
+    <figure th:each="song : ${songs}">
+        <a th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}">
+            <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
+        </a>
+        <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
+        <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>
+    </figure>
+    <p th:text="${nullSong}" class="font" id="nullSong"></p>
+</div>
 </body>
 </html>

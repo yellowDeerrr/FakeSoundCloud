@@ -6,7 +6,7 @@ import com.application.soundcloud.tables.Users;
 import java.util.Base64;
 import java.util.List;
 
-public class EncrypteToBase64 {
+public class EncryptToBase64 {
     public static void encrypteTracks(List<Tracks> songs){
         for (Tracks song : songs) {
             String base64Image = Base64.getEncoder().encodeToString(song.getSongByteCode());
@@ -14,7 +14,7 @@ public class EncrypteToBase64 {
         }
     }
 
-    public void encrypteUsers(Users user){
+    public static void encrypteUser(Users user){
         String base64Image = Base64.getEncoder().encodeToString(user.getAvatarByteCode());
         user.setBase64Image(base64Image);
     }
