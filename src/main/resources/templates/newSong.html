@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Song</title>
+</head>
+<style>
+    body {
+        text-align: center;
+        font-family: cursive;
+        font-style: normal;
+        background-color: #161719;
+        text-decoration: none;
+    }
+</style>
+<body>
+<form method="post" enctype="multipart/form-data">
+    <input type="text" name="nameSong" placeholder="Enter name song">
+    <input type="text" name="nameAuthor" placeholder="Enter name author">
+    <input type="text" name="login" placeholder="Enter login">
+    <input type="password" name="password" placeholder="Enter password">
+    <input type="file" name="avatarSong" placeholder="Upload avatar for song">
+    <input type="file" name="song" placeholder="Upload song">
+    <input type="submit">
+</form>
+<h2 th:text="${message}"></h2>
+<a href="/">Main page</a>
+</body>
+</html>

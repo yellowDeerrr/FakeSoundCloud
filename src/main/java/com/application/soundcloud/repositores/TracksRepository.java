@@ -8,4 +8,5 @@ import java.util.List;
 public interface TracksRepository extends JpaRepository<Tracks, Long> {
     List<Tracks> findByAuthor(String author);
     Tracks findByAuthorAndSongName(String author, String songName);
+    Tracks findBySongKey(String songKey);
 }
