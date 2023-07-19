@@ -1,13 +1,8 @@
 package com.application.soundcloud.tables;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import javax.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Base64;
 
 @Entity
 public class Tracks {
@@ -19,22 +14,20 @@ public class Tracks {
     private int likes;
     private Timestamp date;
     private String songKey; // for identification song in playlist (songs haven't unique name solution - key)
-    private byte[] songByteCode;
-    private byte[] avatarSongByteCode;
-    private String base64Image;
-    private String base64Song;
+    private String songUrl;
+    private String avatarSongUrl;
 
     public Tracks() {
     }
 
-    public Tracks(String songName, String author, int likes, Timestamp date, String songKey, byte[] songByteCode, byte[] avatarSongByteCode) {
+    public Tracks(String songName, String author, int likes, Timestamp date, String songKey, String songUrl, String avatarSongUrl) {
         this.songName = songName;
         this.author = author;
         this.likes = likes;
         this.date = date;
         this.songKey = songKey;
-        this.songByteCode = songByteCode;
-        this.avatarSongByteCode = avatarSongByteCode;
+        this.songUrl = songUrl;
+        this.avatarSongUrl = avatarSongUrl;
     }
 
     public int getId() {
@@ -85,35 +78,19 @@ public class Tracks {
         this.songKey = songKey;
     }
 
-    public byte[] getSongByteCode() {
-        return songByteCode;
+    public String getSongUrl() {
+        return songUrl;
     }
 
-    public void setSongByteCode(byte[] songByteCode) {
-        this.songByteCode = songByteCode;
+    public void setSongUrl(String songUrl) {
+        this.songUrl = songUrl;
     }
 
-    public byte[] getAvatarSongByteCode() {
-        return avatarSongByteCode;
+    public String getAvatarSongUrl() {
+        return avatarSongUrl;
     }
 
-    public void setAvatarSongByteCode(byte[] avatarSongByteCode) {
-        this.avatarSongByteCode = avatarSongByteCode;
-    }
-
-    public String getBase64Image() {
-        return base64Image;
-    }
-
-    public void setBase64Image(String base64Image) {
-        this.base64Image = base64Image;
-    }
-
-    public String getBase64Song() {
-        return base64Song;
-    }
-
-    public void setBase64Song(String base64Song) {
-        this.base64Song = base64Song;
+    public void setAvatarSongUrl(String avatarSongUrl) {
+        this.avatarSongUrl = avatarSongUrl;
     }
 }

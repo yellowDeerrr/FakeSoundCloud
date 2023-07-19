@@ -1,6 +1,6 @@
 package com.application.soundcloud.tables;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Table(name = "_users")
 @Entity
@@ -11,18 +11,17 @@ public class Users {
     private String username;
     private String login;
     private String password;
-    private byte[] avatarByteCode;
-    private String base64Image;
+    private String avatarUrl;
 
 
     public Users() {
     }
 
-    public Users(String username, String login, String password, byte[] avatarByteCode) {
+    public Users(String username, String login, String password, String avatarUrl) {
         this.username = username;
         this.login = login;
         this.password = password;
-        this.avatarByteCode = avatarByteCode;
+        this.avatarUrl = avatarUrl;
     }
 
     public int getId() {
@@ -57,20 +56,11 @@ public class Users {
         this.password = password;
     }
 
-    public byte[] getAvatarByteCode() {
-        return avatarByteCode;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAvatarByteCode(byte[] avatarByteCode) {
-        this.avatarByteCode = avatarByteCode;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
-
-    public String getBase64Image() {
-        return base64Image;
-    }
-
-    public void setBase64Image(String base64Image) {
-        this.base64Image = base64Image;
-    }
-
 }

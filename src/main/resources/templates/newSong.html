@@ -16,11 +16,12 @@
 <body>
 <form method="post" enctype="multipart/form-data">
     <input type="text" name="nameSong" placeholder="Enter name song">
-    <input type="text" name="nameAuthor" placeholder="Enter name author">
-    <input type="text" name="login" placeholder="Enter login">
-    <input type="password" name="password" placeholder="Enter password">
-    <input type="file" name="avatarSong" placeholder="Upload avatar for song">
-    <input type="file" name="song" placeholder="Upload song">
+
+    <label for="photo">Select avatar for song:</label>
+    <input type="file" id="photo" name="avatarSong" accept=".jpg, .jpeg, .png, .gif" />
+    <label for="song">Select song:</label>
+    <input type="file" id="song" name="song" accept=".mp3, .wav, .ogg" />
+
     <input type="submit">
 </form>
 <h2 th:text="${message}"></h2>

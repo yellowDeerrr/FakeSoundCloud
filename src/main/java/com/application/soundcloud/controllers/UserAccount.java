@@ -1,7 +1,7 @@
-package com.application.soundcloud.cotrollers;
+package com.application.soundcloud.controllers;
 
-import com.application.soundcloud.repositores.TracksRepository;
-import com.application.soundcloud.repositores.UsersRepository;
+import com.application.soundcloud.repositories.TracksRepository;
+import com.application.soundcloud.repositories.UsersRepository;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-
-import static com.application.soundcloud.EncryptToBase64.*;
 
 @Controller
 public class UserAccount {
@@ -25,8 +23,6 @@ public class UserAccount {
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
         Users user = usersRepository.findByUsername(accountName);
         if (user != null){
-            encrypteUserAvatarToBase64(user);
-            encrypteTracksImageAndSongToBase64(tracksList);
             model.addAttribute("user", user);
             if (!tracksList.isEmpty()){
                 model.addAttribute("songs", tracksList);

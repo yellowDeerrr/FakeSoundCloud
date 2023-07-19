@@ -62,13 +62,13 @@
 </style>
 <body>
 <div th:each="user : ${user}">
-    <img th:src="'data:image/jpeg;base64,' + ${user.base64Image}" id="avatar">
+    <img th:href="@{'http://localhost:8080/avatar/@' + ${user.username} + '/' + ${user.avatarUrl}}" id="avatar">
     <h1 th:text="${user.username}" class="font" id="accountName"></h1>
 </div>
 <div class="thumb">
     <figure th:each="song : ${songs}">
         <a th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}">
-            <img th:src="'data:image/jpeg;base64,' + ${song.base64Image}" alt="Image">
+            <img th:src="@{'http://localhost:8080/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
         </a>
         <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
         <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>

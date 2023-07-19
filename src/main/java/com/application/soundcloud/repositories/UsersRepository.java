@@ -1,4 +1,4 @@
-package com.application.soundcloud.repositores;
+package com.application.soundcloud.repositories;
 
 import com.application.soundcloud.tables.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
