@@ -1,9 +1,9 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.TracksRepository;
-import com.application.soundcloud.repositories.UsersRepository;
+import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.Tracks;
-import com.application.soundcloud.tables.Users;
+import com.application.soundcloud.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,10 @@ public class Song {
     @Autowired
     private TracksRepository tracksRepository;
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
     @GetMapping("/@{accountName}/{songName}")
     public String getPageWithSong(@PathVariable String accountName, @PathVariable String songName, Model model){
-        Users user = usersRepository.findByUsername(accountName);
+        User user = userRepository.findByLogin(accountName);
         if (user != null){
             Tracks song = tracksRepository.findByAuthorAndSongName(accountName, songName);
             if (song != null){

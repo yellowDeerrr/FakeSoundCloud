@@ -5,7 +5,7 @@
     <title>Tracks</title>
 </head>
 <style>
-    #avatar{
+    .avatar{
         border: 2px solid #161719;
         border-radius: 50%;
         width: 100px;
@@ -61,14 +61,16 @@
     }
 </style>
 <body>
-<div th:each="user : ${user}">
-    <img th:href="@{'http://localhost:8080/avatar/@' + ${user.username} + '/' + ${user.avatarUrl}}" id="avatar">
-    <h1 th:text="${user.username}" class="font" id="accountName"></h1>
+<div th:each="user : ${user}" th:switch="${userAvatar}">
+    <img th:case="'ownUserAvatar'" th:src="${user.avatarUrl}" class="avatar">
+    <img th:case="'userOauth2Avatar'" th:src="${user.avatarUrl}" class="avatar">
+    <img th:case="'standard'" th:src="${'http://localhost:8080/files/avatar/@standard/KpH8YmV4eT.jpg'}" class="avatar">
+    <h1 th:text="${user.login}" class="font" id="accountName"></h1>
 </div>
 <div class="thumb">
     <figure th:each="song : ${songs}">
         <a th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}">
-            <img th:src="@{'http://localhost:8080/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
+            <img th:src="@{'http://localhost:8080/files/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
         </a>
         <figcaption><a th:text="${song.songName}" th:href="@{'http://localhost:8080/@' + ${song.author} + '/' + ${song.songName}}" class="songName"></a></figcaption>
         <figcaption th:text="'♡' + ${song.likes}" class="symbolLike"></figcaption>

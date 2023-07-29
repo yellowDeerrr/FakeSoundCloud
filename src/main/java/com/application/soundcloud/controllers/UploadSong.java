@@ -1,6 +1,7 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.TracksRepository;
+import com.application.soundcloud.services.SongService;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.userDetails.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,83 +29,82 @@ import java.util.Random;
 @Controller
 @RequestMapping("/new")
 public class UploadSong {
-@Autowired
-private TracksRepository tracksRepository;
+    @Autowired
+    private TracksRepository tracksRepository;
 
-@GetMapping("/song")
-public String getPageForUploadSong() {
-    return "newSong";
-}
+    @Autowired
+    private SongService songService;
 
-@PostMapping("/song")
-public String checkInfoForUploadSong(@RequestParam MultipartFile avatarSong,
-                                     @RequestParam MultipartFile song,
-                                     @RequestParam String nameSong,
-                                     @AuthenticationPrincipal OAuth2User principal,
-                                     Model model) {
-    String nameAuthor = principal.getAttribute("name") != null ? principal.getAttribute("name") : principal.getAttribute("login");
+    @GetMapping("/song")
+    public String getPageForUploadSong() {
+        return "newSong";
+    }
 
-    // Додайте інші необхідні дані з об'єкта CustomUserDetails
-    Tracks checkTrack = tracksRepository.findByAuthorAndSongName(nameAuthor, nameSong);
-    if (checkTrack == null) {
-        String avatarSongKey = generateKey();
-        String songKey = generateKey();
-        try {
-            byte[] bytesOfSong = song.getBytes();
-            byte[] bytesOfAvatarSong = avatarSong.getBytes();
+    @PostMapping("/song")
+    public String checkInfoForUploadSong(@RequestParam MultipartFile avatarSong,
+                                         @RequestParam MultipartFile song,
+                                         @RequestParam String nameSong,
+                                         Model model,
+                                         Authentication authentication) {
+        String nameAuthor;
 
-            String originalFilenameOfSongFile = song.getOriginalFilename();
-            String originalFilenameOfAvatarSongFile = avatarSong.getOriginalFilename();
-
-            if ((originalFilenameOfSongFile != null && !song.isEmpty()) && (originalFilenameOfAvatarSongFile != null && !avatarSong.isEmpty())) {
-                String fileExtensionSong = originalFilenameOfSongFile.substring(originalFilenameOfSongFile.lastIndexOf(".") + 1);
-                String fileExtensionAvatarSong = originalFilenameOfAvatarSongFile.substring(originalFilenameOfAvatarSongFile.lastIndexOf(".") + 1);
-
-                String songKeyWithExtensionSong = songKey + "." + fileExtensionSong;
-                String avatarSongKeyWithExtension = avatarSongKey + "." + fileExtensionAvatarSong;
-
-                Path pathToSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\soundcloud\\src\\main\\resources\\static\\tracks\\@" + nameAuthor + "\\" + songKeyWithExtensionSong);
-                Path pathToAvatarSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\soundcloud\\src\\\\main\\resources\\static\\avatarSong\\@" + nameAuthor + "\\" + avatarSongKeyWithExtension);
-
-                Files.createDirectories(pathToSong.getParent());
-                Files.createDirectories(pathToAvatarSong.getParent());
-
-                Files.write(pathToSong, bytesOfSong);
-                Files.write(pathToAvatarSong, bytesOfAvatarSong);
-
-                Tracks newTrack = new Tracks(nameSong, nameAuthor, 0, new Timestamp(System.currentTimeMillis()), songKey, songKeyWithExtensionSong, avatarSongKeyWithExtension);
-                tracksRepository.save(newTrack);
-                model.addAttribute("message", "Successful");
-            } else {
-                model.addAttribute("message", "Add photo");
-            }
-        } catch (IOException e) {
-            model.addAttribute("message", "Unsuccessful");
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // Redirect to the homepage if the user is not authenticated
+            return "redirect:/";
         }
-    } else {
-        model.addAttribute("message", "Error track");
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof OAuth2User){
+            OAuth2User oAuth2User = (OAuth2User) principal;
+            nameAuthor = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : oAuth2User.getAttribute("login");
+        } else if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            nameAuthor = userDetails.getUsername();
+        }else{
+            return "redirect:/error";
+        }
+
+        // Додайте інші необхідні дані з об'єкта CustomUserDetails
+        Tracks checkTrack = tracksRepository.findByAuthorAndSongName(nameAuthor, nameSong);
+        if (checkTrack == null) {
+            String avatarSongKey = songService.generateKey();
+            String songKey = songService.generateKey();
+            try {
+                byte[] bytesOfSong = song.getBytes();
+                byte[] bytesOfAvatarSong = avatarSong.getBytes();
+
+                String originalFilenameOfSongFile = song.getOriginalFilename();
+                String originalFilenameOfAvatarSongFile = avatarSong.getOriginalFilename();
+
+                if ((originalFilenameOfSongFile != null && !song.isEmpty()) && (originalFilenameOfAvatarSongFile != null && !avatarSong.isEmpty())) {
+                    String fileExtensionSong = originalFilenameOfSongFile.substring(originalFilenameOfSongFile.lastIndexOf(".") + 1);
+                    String fileExtensionAvatarSong = originalFilenameOfAvatarSongFile.substring(originalFilenameOfAvatarSongFile.lastIndexOf(".") + 1);
+
+                    String songKeyWithExtensionSong = songKey + "." + fileExtensionSong;
+                    String avatarSongKeyWithExtension = avatarSongKey + "." + fileExtensionAvatarSong;
+
+                    Path pathToSong = Paths.get("src/main/resources/static/tracks/@" + nameAuthor + "/" + songKeyWithExtensionSong);
+                    Path pathToAvatarSong = Paths.get("src/main/resources/static/avatarSong/@" + nameAuthor + "/" + avatarSongKeyWithExtension);
+
+                    Files.createDirectories(pathToSong.getParent());
+                    Files.createDirectories(pathToAvatarSong.getParent());
+
+                    Files.write(pathToSong, bytesOfSong);
+                    Files.write(pathToAvatarSong, bytesOfAvatarSong);
+
+                    Tracks newTrack = new Tracks(nameSong, nameAuthor, 0, new Timestamp(System.currentTimeMillis()), songKey, songKeyWithExtensionSong, avatarSongKeyWithExtension);
+                    tracksRepository.save(newTrack);
+                    model.addAttribute("message", "Successful");
+                } else {
+                    model.addAttribute("message", "Add photo");
+                }
+            } catch (IOException e) {
+                model.addAttribute("message", "Unsuccessful");
+            }
+        } else {
+            model.addAttribute("message", "Error track");
+        }
+
+        return "newSong";
     }
-
-    return "newSong";
-}
-
-private String generateKey() {
-    Random random = new Random();
-    StringBuilder stringBuilder = new StringBuilder();
-
-    for (int i = 0; i < 10; i++) {
-        char randomSymbol = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".charAt(random.nextInt("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".length())); // Випадковий символ зі стрічки symbols
-
-        stringBuilder.append(randomSymbol);
-    }
-    String res = stringBuilder.toString();
-    Tracks checkSongKey = tracksRepository.findBySongKey(res);
-    if (checkSongKey == null) {
-        return res;
-    } else {
-        generateKey();
-    }
-
-    return null;
-}
 }

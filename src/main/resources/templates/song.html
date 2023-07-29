@@ -66,7 +66,7 @@
 <div th:each="song : ${song}">
   <div class="container">
     <div class="image">
-      <img th:href="@{'http://localhost:8080/files/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
+      <img th:src="@{'http://localhost:8080/files/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
     </div>
     <div class="text">
       <h3 th:text="${song.songName}" class="songName"></h3>
@@ -76,7 +76,7 @@
   </div>
   <div class="container player">
     <audio controls>
-      <source th:href="@{'http://localhost:8080/files/tracks/@' + ${song.author} + '/' + ${song.songUrl}}" type="audio/mpeg">
+      <source th:src="@{'http://localhost:8080/files/tracks/@' + ${song.author} + '/' + ${song.songUrl}}" type="audio/mpeg">
     </audio>
   </div>
 </div>
