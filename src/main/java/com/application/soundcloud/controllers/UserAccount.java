@@ -37,7 +37,7 @@ public class UserAccount {
             model.addAttribute("user", user);
             if (user.getAvatarUrl().contains("http://localhost:8080/files/avatar") && !user.getAvatarUrl().contains("http://localhost:8080/files/avatar/@standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
-            }else if (user.getAvatarUrl().equals("http://localhost:8080/files/avatar/@standard/KpH8YmV4eT.jpg")){
+            }else if (user.getAvatarUrl().equals("http://localhost:8080/files/avatar/standard/KpH8YmV4eT.jpg")){
                 model.addAttribute("userAvatar", "standard");
             }
             else {

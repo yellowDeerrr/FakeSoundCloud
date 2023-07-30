@@ -56,8 +56,7 @@ public class RegisterController {
 
                     String avatarUrlKeyWithExtensionAvatarFile = avatarUrlKey + "." + fileExtensionAvatar;
 
-                    Path pathToAvatarFile = Paths.get("src/main/resources/static/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
-
+                    Path pathToAvatarFile = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\avatar\\@" + login + "\\" + avatarUrlKeyWithExtensionAvatarFile);
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
@@ -71,7 +70,7 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl("http://localhost:8080/files/avatar/@standard/KpH8YmV4eT.jpg");
+            user.setAvatarUrl("http://localhost:8080/files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
