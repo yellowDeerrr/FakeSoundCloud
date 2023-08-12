@@ -17,14 +17,14 @@
         <h1>Please sign in</h1>
     </div>
     <div th:if="${loginError}" class="alert alert-danger" role="alert">Wrong user or password</div>
-    <form th:action="'http://localhost:8080/login'"
+    <form th:action="'/login'"
           method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">
             <div class="form-group row">
-                <label class="col-4 col-form-label">Login: </label>
+                <label class="col-4 col-form-label">Login Or Email: </label>
                 <div class="col-8">
                     <input type="text" name="username" autofocus="autofocus" class="form-control"
-                           required minlength="2" maxlength="20" />
+                           required minlength="2" maxlength="55" />
                 </div>
             </div>
 
@@ -37,12 +37,12 @@
             </div>
 
             <div>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button type="submit" class="btn btn-primary">Log in</button>
             </div>
             <div class="container">
                 <h2 class="form-signin-heading">Login with OAuth 2.0</h2><table class="table table-striped">
-                <tbody><tr><td><a href="/oauth2/authorization/github">GitHub</a></td></tr>
-                <tr><td><a href="/oauth2/authorization/google">Google</a></td></tr>
+                <tbody><tr><td><a href="http://localhost:8080/oauth2/authorization/github">GitHub</a></td></tr>
+                <tr><td><a href="http://localhost:8080/oauth2/authorization/google">Google</a></td></tr>
                 </tbody></table>
             </div>
         </div>

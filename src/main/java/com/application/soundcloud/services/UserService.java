@@ -17,7 +17,7 @@ public class UserService {
     }
 
     public void checkAndAddUser(String username, String email, String avatarUrl) {
-        if (userRepository.findByLogin(username) == null) {
+        if (userRepository.findByLogin(username) == null || userRepository.findByEmail(email) == null) {
 
             User user = new User();
             user.setLogin(username);

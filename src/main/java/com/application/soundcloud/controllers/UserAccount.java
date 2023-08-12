@@ -33,11 +33,12 @@ public class UserAccount {
     public String getPageAccountName(@PathVariable String accountName, Model model){
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
         User user = userRepository.findByLogin(accountName);
+
         if (user != null){
             model.addAttribute("user", user);
-            if (user.getAvatarUrl().contains("http://localhost:8080/files/avatar") && !user.getAvatarUrl().contains("http://localhost:8080/files/avatar/@standard")){
+            if (user.getAvatarUrl().contains("http://31.131.36.60:8080/files/avatar") && !user.getAvatarUrl().contains("http://31.131.36.60:8080/files/avatar/standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
-            }else if (user.getAvatarUrl().equals("http://localhost:8080/files/avatar/standard/KpH8YmV4eT.jpg")){
+            }else if (user.getAvatarUrl().equals("http://31.131.36.60:8080/files/avatar/standard/KpH8YmV4eT.jpg")){
                 model.addAttribute("userAvatar", "standard");
             }
             else {

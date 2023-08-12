@@ -3,11 +3,8 @@ package com.application.soundcloud.controllers;
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.services.SongService;
 import com.application.soundcloud.tables.Tracks;
-import com.application.soundcloud.userDetails.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -22,9 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.sql.Timestamp;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/new")
@@ -83,7 +78,7 @@ public class UploadSong {
                     String songKeyWithExtensionSong = songKey + "." + fileExtensionSong;
                     String avatarSongKeyWithExtension = avatarSongKey + "." + fileExtensionAvatarSong;
 
-                    Path pathToSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\tracks\\@" + nameAuthor + "\\" + avatarSongKeyWithExtension);
+                    Path pathToSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\tracks\\@" + nameAuthor + "\\" + songKeyWithExtensionSong);
                     Path pathToAvatarSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\avatarSong\\@" + nameAuthor + "\\" + avatarSongKeyWithExtension);
 
                     Files.createDirectories(pathToSong.getParent());

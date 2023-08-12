@@ -38,13 +38,16 @@ public class RegisterController {
     public String checkInfoUserWhileRegistration(Model model, User user, @RequestParam MultipartFile avatarFile) {
         String login = user.getLogin();
 
-        if (userRepository.findByLogin(user.getLogin()) != null){
-            model.addAttribute("errorMessage", "User name is already using");
+        if (userRepository.findByLogin(login) != null){
+            model.addAttribute("errorMessage", "Login is already using");
             return "signup_form";
         }if (userRepository.findByEmail(user.getEmail()) != null){
             model.addAttribute("errorMessage", "Email is already using");
             return "signup_form";
-        }if (avatarFile != null && !avatarFile.isEmpty()){
+        }if (userRepository.findByUsername(user.getUsername()) != null){
+            model.addAttribute("errorMessage", "Username is already using");
+        }
+        if (avatarFile != null && !avatarFile.isEmpty()){
             String avatarUrlKey = userService.generateKeyForAvatarUrl();
             try {
                 byte[] bytesOfAvatarFile = avatarFile.getBytes();
@@ -60,7 +63,7 @@ public class RegisterController {
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
-                    user.setAvatarUrl("http://localhost:8080/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    user.setAvatarUrl("http://31.131.36.60:8080/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                 } else {
                     model.addAttribute("errorMessage", "Add photo");
                     return "signup_form";
@@ -70,7 +73,7 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl("http://localhost:8080/files/avatar/standard/KpH8YmV4eT.jpg");
+            user.setAvatarUrl("http://31.131.36.60:8080/files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());

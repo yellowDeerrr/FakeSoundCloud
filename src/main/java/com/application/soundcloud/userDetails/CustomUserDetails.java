@@ -9,11 +9,13 @@ public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
+    private String email; // Додаткове поле для email
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.authorities = authorities;
     }
 
@@ -30,6 +32,11 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    // Метод для отримання email
+    public String getEmail() {
+        return email;
     }
 
     @Override

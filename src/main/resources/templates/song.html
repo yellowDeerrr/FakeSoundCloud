@@ -60,23 +60,61 @@
       margin: 0;
       line-height: 1;
     }
+    .likeButton {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .likeButton.like {
+      background-color: red;
+    }
+    .likeButton.unlike {
+      background-color: gray;
+    }
   </style>
+  <script>
+    function likeButtonClick(button) {
+      var songKey = button.dataset.songKey;
+      var likeStatus = button.classList.contains("like");
+      // Send an AJAX request to update the like status
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/update-like-status", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Update the button class to reflect the new like status
+          if (likeStatus) {
+            button.classList.remove("like");
+            button.classList.add("unlike");
+          } else {
+            button.classList.remove("unlike");
+            button.classList.add("like");
+          }
+        }
+      };
+      xhr.send("songKey=" + encodeURIComponent(songKey) + "&likeStatus=" + encodeURIComponent(likeStatus));
+    }
+  </script>
 </head>
 <body>
 <div th:each="song : ${song}">
   <div class="container">
     <div class="image">
-      <img th:src="@{'http://localhost:8080/files/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
+      <img th:src="@{'/files/avatarSong/@' + ${song.author} + '/' + ${song.avatarSongUrl}}" alt="Image">
     </div>
     <div class="text">
       <h3 th:text="${song.songName}" class="songName"></h3>
-      <a th:text="${song.author}" th:href="@{'http://localhost:8080/@' + ${song.author}}" class="author"></a>
+      <a th:text="${song.author}" th:href="@{'/@' + ${song.author}}" class="author"></a>
       <p th:text="'♡' + ${song.likes}" class="symbolLike"></p>
+      <div class="likeButton like" data-song-key="${song.songKey}" onclick="likeButtonClick(this);">❤️</div>
     </div>
   </div>
   <div class="container player">
     <audio controls>
-      <source th:src="@{'http://localhost:8080/files/tracks/@' + ${song.author} + '/' + ${song.songUrl}}" type="audio/mpeg">
+      <source th:src="@{'/files/tracks/@' + ${song.author} + '/' + ${song.songUrl}}" type="audio/mpeg">
     </audio>
   </div>
 </div>

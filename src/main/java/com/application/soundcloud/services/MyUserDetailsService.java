@@ -18,11 +18,20 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login);
+    public UserDetails loadUserByUsername(String loginOrEmail) throws UsernameNotFoundException {
+        User user;
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
+        if (loginOrEmail.matches(emailRegex)){
+            user = userRepository.findByEmail(loginOrEmail);
+        }else{
+            user = userRepository.findByLogin(loginOrEmail);
+        }
+
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
+
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }
