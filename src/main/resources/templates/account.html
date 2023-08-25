@@ -64,7 +64,7 @@
 <div th:each="user : ${user}" th:switch="${userAvatar}">
     <img th:case="'ownUserAvatar'" th:src="${user.avatarUrl}" class="avatar">
     <img th:case="'userOauth2Avatar'" th:src="${user.avatarUrl}" class="avatar">
-    <img th:case="'standard'" th:src="${'http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg'}" class="avatar">
+    <img th:case="'standard'" th:src="${'https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg'}" class="avatar">
     <h1 th:text="${user.login}" class="font" id="accountName"></h1>
 </div>
 <div class="thumb">

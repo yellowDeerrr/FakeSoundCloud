@@ -63,7 +63,7 @@ public class RegisterController {
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
-                    user.setAvatarUrl("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    user.setAvatarUrl("httpі://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                 } else {
                     model.addAttribute("errorMessage", "Add photo");
                     return "signup_form";
@@ -73,7 +73,7 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg");
+            user.setAvatarUrl("https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());

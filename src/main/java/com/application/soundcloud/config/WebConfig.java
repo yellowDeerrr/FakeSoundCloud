@@ -10,7 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:/home/ubuntu/projects/files/SoundCloud/");
+        registry.addResourceHandler("/files/**", "/.well-known/acme-challenge/**")
+                .addResourceLocations("file:/home/ubuntu/projects/files/SoundCloud/")
+                .addResourceLocations("file:/home/ubuntu/projects/files/SoundCloud/.well-known/acme-challenge/");
     }
 }
