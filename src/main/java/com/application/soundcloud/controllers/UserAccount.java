@@ -36,9 +36,9 @@ public class UserAccount {
 
         if (user != null){
             model.addAttribute("user", user);
-            if (user.getAvatarUrl().contains("http://31.131.36.60:8080/files/avatar") && !user.getAvatarUrl().contains("http://31.131.36.60:8080/files/avatar/standard")){
+            if (user.getAvatarUrl().contains("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar") && !user.getAvatarUrl().contains("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
-            }else if (user.getAvatarUrl().equals("http://31.131.36.60:8080/files/avatar/standard/KpH8YmV4eT.jpg")){
+            }else if (user.getAvatarUrl().equals("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg")){
                 model.addAttribute("userAvatar", "standard");
             }
             else {
@@ -58,6 +58,7 @@ public class UserAccount {
 
     @GetMapping("/you")
     public String viewYourAccount(Authentication authentication) {
+        User user;
         if (authentication == null || !authentication.isAuthenticated()) {
             // Redirect to the homepage if the user is not authenticated
             return "redirect:/";
@@ -68,7 +69,12 @@ public class UserAccount {
             // Handle OAuth2 authentication
             OAuth2User oAuth2User = (OAuth2User) principal;
             String username = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : oAuth2User.getAttribute("login");
-            return "redirect:/@" + username;
+            String email = oAuth2User.getAttribute("email");
+            user = userRepository.findByEmail(email);
+            if (user == null){
+                return "redirect:/@" + username;
+            }
+            return "redirect:/@" + user.getLogin();
         } else if (principal instanceof UserDetails) {
             // Handle standard username/password authentication
             UserDetails userDetails = (UserDetails) principal;

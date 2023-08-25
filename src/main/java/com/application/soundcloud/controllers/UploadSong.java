@@ -78,8 +78,8 @@ public class UploadSong {
                     String songKeyWithExtensionSong = songKey + "." + fileExtensionSong;
                     String avatarSongKeyWithExtension = avatarSongKey + "." + fileExtensionAvatarSong;
 
-                    Path pathToSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\tracks\\@" + nameAuthor + "\\" + songKeyWithExtensionSong);
-                    Path pathToAvatarSong = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\avatarSong\\@" + nameAuthor + "\\" + avatarSongKeyWithExtension);
+                    Path pathToSong = Paths.get("/home/ubuntu/projects/files/SoundCloud/tracks/@" + nameAuthor + "/" + songKeyWithExtensionSong);
+                    Path pathToAvatarSong = Paths.get("/home/ubuntu/projects/files/SoundCloud/avatarSong/@" + nameAuthor + "/" + avatarSongKeyWithExtension);
 
                     Files.createDirectories(pathToSong.getParent());
                     Files.createDirectories(pathToAvatarSong.getParent());

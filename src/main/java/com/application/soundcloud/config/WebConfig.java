@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\");
+                .addResourceLocations("file:/home/ubuntu/projects/files/SoundCloud/");
     }
 }

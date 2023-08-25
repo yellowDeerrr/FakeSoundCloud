@@ -38,7 +38,7 @@ public class RegisterController {
     public String checkInfoUserWhileRegistration(Model model, User user, @RequestParam MultipartFile avatarFile) {
         String login = user.getLogin();
 
-        if (userRepository.findByLogin(login) != null){
+        if (userRepository.findByLogin(user.getLogin()) != null){
             model.addAttribute("errorMessage", "Login is already using");
             return "signup_form";
         }if (userRepository.findByEmail(user.getEmail()) != null){
@@ -59,11 +59,11 @@ public class RegisterController {
 
                     String avatarUrlKeyWithExtensionAvatarFile = avatarUrlKey + "." + fileExtensionAvatar;
 
-                    Path pathToAvatarFile = Paths.get("F:\\Java\\intellji\\spring\\projects\\SoundCloud\\src\\main\\resources\\static\\files\\avatar\\@" + login + "\\" + avatarUrlKeyWithExtensionAvatarFile);
+                    Path pathToAvatarFile = Paths.get("/home/ubuntu/projects/files/SoundCloud/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
-                    user.setAvatarUrl("http://31.131.36.60:8080/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    user.setAvatarUrl("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                 } else {
                     model.addAttribute("errorMessage", "Add photo");
                     return "signup_form";
@@ -73,7 +73,7 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl("http://31.131.36.60:8080/files/avatar/standard/KpH8YmV4eT.jpg");
+            user.setAvatarUrl("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());

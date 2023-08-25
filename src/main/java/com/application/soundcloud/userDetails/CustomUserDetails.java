@@ -9,7 +9,7 @@ public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
-    private String email; // Додаткове поле для email
+    private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {

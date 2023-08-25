@@ -41,7 +41,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Email: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{email}" class="form-control"
+                    <input type="email" th:field="*{email}" class="form-control"
                            required minlength="2" maxlength="50" />
                 </div>
             </div>
@@ -66,8 +66,8 @@
             </div>
             <div class="container">
                 <h2 class="form-signin-heading">Login with OAuth 2.0</h2><table class="table table-striped">
-                <tbody><tr><td><a href="http://localhost:8080/oauth2/authorization/github">GitHub</a></td></tr>
-                <tr><td><a href="http://localhost:8080/oauth2/authorization/google">Google</a></td></tr>
+                <tbody><tr><td><a href="http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/oauth2/authorization/github">GitHub</a></td></tr>
+                <tr><td><a href="http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/oauth2/authorization/google">Google</a></td></tr>
                 </tbody></table>
             </div>
         </div>
