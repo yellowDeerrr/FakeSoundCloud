@@ -4,6 +4,7 @@ import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.services.SongService;
 import com.application.soundcloud.tables.Tracks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,6 +30,9 @@ public class UploadSong {
 
     @Autowired
     private SongService songService;
+
+    @Value("${pathToSoundCloudFiles}")
+    private String path;
 
     @GetMapping("/song")
     public String getPageForUploadSong() {
@@ -78,8 +82,8 @@ public class UploadSong {
                     String songKeyWithExtensionSong = songKey + "." + fileExtensionSong;
                     String avatarSongKeyWithExtension = avatarSongKey + "." + fileExtensionAvatarSong;
 
-                    Path pathToSong = Paths.get("/home/ubuntu/projects/files/SoundCloud/tracks/@" + nameAuthor + "/" + songKeyWithExtensionSong);
-                    Path pathToAvatarSong = Paths.get("/home/ubuntu/projects/files/SoundCloud/avatarSong/@" + nameAuthor + "/" + avatarSongKeyWithExtension);
+                    Path pathToSong = Paths.get(path + "tracks/@" + nameAuthor + "/" + songKeyWithExtensionSong);
+                    Path pathToAvatarSong = Paths.get(path + "avatarSong/@" + nameAuthor + "/" + avatarSongKeyWithExtension);
 
                     Files.createDirectories(pathToSong.getParent());
                     Files.createDirectories(pathToAvatarSong.getParent());

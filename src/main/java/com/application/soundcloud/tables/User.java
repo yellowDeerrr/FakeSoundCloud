@@ -12,18 +12,10 @@ public class User {
     private String login;
     private String password;
     private String email;
-    private String activationCode;
+    private String urlForActivationCode;
+    private Integer activationCode;
     private String avatarUrl;
     public User() {
-    }
-
-    public User(String username, String login, String password, String email, String avatarUrl, String activationCode) {
-        this.username = username;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.avatarUrl = avatarUrl;
-        this.activationCode = activationCode;
     }
 
     public int getId() {
@@ -75,11 +67,19 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public String getActivationCode() {
+    public Integer getActivationCode() {
         return activationCode;
     }
 
-    public void setActivationCode(String activationCode) {
+    public void setActivationCode(Integer activationCode) {
         this.activationCode = activationCode;
+    }
+
+    public String getUrlForActivationCode() {
+        return urlForActivationCode;
+    }
+
+    public void setUrlForActivationCode(String urlForActivationCode) {
+        this.urlForActivationCode = urlForActivationCode;
     }
 }

@@ -5,6 +5,7 @@ import com.application.soundcloud.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -35,16 +36,22 @@ public class UserService {
         }
     }
 
-    public boolean activateUser(String code){
-        User user = userRepository.findByActivationCode(code);
+    public User isActivateUser(String urlForActivationCode){
+        return userRepository.findByUrlForActivationCode(urlForActivationCode);
+    }
+
+
+    public User checkActivationCode(String urlForActivationCode, Integer code) {
+        User user = userRepository.findByUrlForActivationCodeAndActivationCode(urlForActivationCode, code);
 
         if (user == null){
-            return false;
+            return user;
         }
+        user.setUrlForActivationCode(null);
         user.setActivationCode(null);
         userRepository.save(user);
 
-        return true;
+        return user;
     }
 
     public String generateKeyForAvatarUrl(){
@@ -92,4 +99,5 @@ public class UserService {
 
         return newLogin;
     }
+
 }

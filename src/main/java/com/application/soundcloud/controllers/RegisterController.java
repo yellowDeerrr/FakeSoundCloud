@@ -6,6 +6,7 @@ import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.Random;
 import java.util.UUID;
 
 @Controller
@@ -32,6 +34,12 @@ public class RegisterController {
 
     @Autowired
     private MailSender mailSender;
+
+    @Value("${url}")
+    private String url;
+
+    @Value("${pathToSoundCloudFiles}")
+    private String path;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -65,11 +73,11 @@ public class RegisterController {
 
                     String avatarUrlKeyWithExtensionAvatarFile = avatarUrlKey + "." + fileExtensionAvatar;
 
-                    Path pathToAvatarFile = Paths.get("/home/ubuntu/projects/files/SoundCloud/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    Path pathToAvatarFile = Paths.get(path + "avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
-                    user.setAvatarUrl("httpі://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    user.setAvatarUrl(url + "files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                 } else {
                     model.addAttribute("errorMessage", "Add photo");
                     return "signup_form";
@@ -79,23 +87,29 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl("https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg");
+            user.setAvatarUrl(url + "files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        user.setActivationCode(UUID.randomUUID().toString());
+        user.setUrlForActivationCode(UUID.randomUUID().toString());
+        user.setActivationCode(generateFiveDigitNumber());
         userRepository.save(user);
 
         String message = String.format(
                 "Hello, %s! \n" +
-                        "Welcome to Sweater. Please, visit next link: https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/activate/%s",
+                        "Welcome to Sweater. Your activation code: %s",
                 user.getUsername(),
                 user.getActivationCode());
 
         mailSender.send(user.getEmail(), "Activation code", message);
 
-        return "register_success";
+        return "redirect:/activate/" + user.getUrlForActivationCode();
+    }
+
+    public int generateFiveDigitNumber() {
+        Random random = new Random();
+        return 10000 + random.nextInt(90000); // Generates a number between 10000 and 99999
     }
 }

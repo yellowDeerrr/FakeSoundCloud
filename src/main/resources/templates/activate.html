@@ -1,17 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Activate</title>
+    <meta charset="ISO-8859-1">
+    <title>Sign Up</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+
 </head>
 <body>
-<div th:if="${isActivated}">
-    <p>User successfully activated</p>
-    <h4><a href="/login">Click here to Login</a></h4>
-</div>
-<div th:if="${!isActivated}">
-    <p>Activation code is not found :(</p>
-    <a href="/">Main menu</a>
+<div class="container text-center">
+    <div>
+        <h1>Activation</h1>
+        <h2>We sent code to <span th:text="${maskedEmail}"></span></h2>
+    </div>
+    <div th:if="${isActivated}">
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+        <form method="post" style="max-width: 600px; margin: 0 auto;">
+            <div class="m-3">
+                <div class="form-group row">
+                    <label class="col-4 col-form-label">Code: </label>
+                    <div class="col-8">
+                        <input type="text" name="code" autofocus="autofocus" class="form-control"
+                               required minlength="5" maxlength="5" />
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Activate</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${!isActivated}" class="alert alert-danger">
+        <p>Activation code is not found :(</p>
+        <a href="/" class="btn btn-link">Main Menu</a>
+    </div>
 </div>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,8 @@ public class UserAccount {
     private TracksRepository tracksRepository;
     @Autowired
     private UserRepository userRepository;
+    @Value("${url}")
+    private String url;
 
     @GetMapping("/@{accountName}")
     public String getPageAccountName(@PathVariable String accountName, Model model){
@@ -36,9 +39,9 @@ public class UserAccount {
 
         if (user != null){
             model.addAttribute("user", user);
-            if (user.getAvatarUrl().contains("https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar") && !user.getAvatarUrl().contains("http://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard")){
+            if (user.getAvatarUrl().contains(url + "files/avatar") && !user.getAvatarUrl().contains(url + "files/avatar/standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
-            }else if (user.getAvatarUrl().equals("https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/files/avatar/standard/KpH8YmV4eT.jpg")){
+            }else if (user.getAvatarUrl().equals(url + "files/avatar/standard/KpH8YmV4eT.jpg")){
                 model.addAttribute("userAvatar", "standard");
             }
             else {
