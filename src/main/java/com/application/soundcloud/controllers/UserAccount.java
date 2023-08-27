@@ -35,7 +35,7 @@ public class UserAccount {
     @GetMapping("/@{accountName}")
     public String getPageAccountName(@PathVariable String accountName, Model model){
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
-        User user = userRepository.findByLogin(accountName);
+        User user = userRepository.findByUsername(accountName);
 
         if (user != null){
             model.addAttribute("user", user);

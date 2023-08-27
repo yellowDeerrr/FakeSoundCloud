@@ -12,8 +12,9 @@ public class User {
     private String login;
     private String password;
     private String email;
-    private String urlForActivationCode;
+    private String urlActivationCode;
     private Integer activationCode;
+    private String urlActivationCodeForResetPassword;
     private String avatarUrl;
     public User() {
     }
@@ -75,11 +76,19 @@ public class User {
         this.activationCode = activationCode;
     }
 
-    public String getUrlForActivationCode() {
-        return urlForActivationCode;
+    public String getUrlActivationCode() {
+        return urlActivationCode;
     }
 
-    public void setUrlForActivationCode(String urlForActivationCode) {
-        this.urlForActivationCode = urlForActivationCode;
+    public void setUrlActivationCode(String urlActivationCode) {
+        this.urlActivationCode = urlActivationCode;
+    }
+
+    public String getUrlActivationCodeForResetPassword() {
+        return urlActivationCodeForResetPassword;
+    }
+
+    public void setUrlActivationCodeForResetPassword(String urlActivationCodeForResetPassword) {
+        this.urlActivationCodeForResetPassword = urlActivationCodeForResetPassword;
     }
 }

@@ -15,11 +15,13 @@ public class ActivateCodeController {
     private String maskedEmail;
     @Autowired
     private UserService userService;
-    @GetMapping("/activate/{urlForActivationCode}")
-    public String showActivatePage(@PathVariable String urlForActivationCode, Model model){
-        User isActivated = userService.isActivateUser(urlForActivationCode);
-        maskedEmail = maskEmail(isActivated.getEmail());
-        if (isActivated != null && isActivated.getUrlForActivationCode() != null) {
+    @GetMapping("/activate/{urlActivationCode}")
+    public String showActivatePage(@PathVariable String urlActivationCode, Model model){
+        User isActivated = userService.isActivateUser(urlActivationCode);
+
+        if (isActivated != null && isActivated.getUrlActivationCode() != null) {
+            maskedEmail = userService.maskEmail(isActivated.getEmail());
+
             model.addAttribute("isActivated", true);
             model.addAttribute("maskedEmail", maskedEmail);
         }else {
@@ -28,9 +30,9 @@ public class ActivateCodeController {
         return "activate";
     }
 
-    @PostMapping("/activate/{urlForActivationCode}")
-    public String checkActivateCode(@PathVariable String urlForActivationCode, @RequestParam Integer code, Model model){
-        User checkActivationCode = userService.checkActivationCode(urlForActivationCode, code);
+    @PostMapping("/activate/{urlActivationCode}")
+    public String checkActivateCode(@PathVariable String urlActivationCode, @RequestParam Integer code, Model model){
+        User checkActivationCode = userService.checkActivationCode(urlActivationCode, code);
 
         if (checkActivationCode != null)
             return "register_success";
@@ -40,17 +42,5 @@ public class ActivateCodeController {
         model.addAttribute("maskedEmail", maskedEmail);
 
         return "activate";
-    }
-
-    private String maskEmail(String email) {
-        String[] parts = email.split("@");
-        if (parts.length == 2) {
-            String username = parts[0];
-            String domain = parts[1];
-            int lengthToShow = 2; // Кількість символів, які залишити видимими
-            String maskedUsername = username.substring(0, Math.min(lengthToShow, username.length())) + "*****";
-            return maskedUsername + "@" + domain;
-        }
-        return email;
     }
 }

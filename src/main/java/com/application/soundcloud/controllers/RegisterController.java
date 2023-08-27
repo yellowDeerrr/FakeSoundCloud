@@ -3,7 +3,6 @@ package com.application.soundcloud.controllers;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.services.MailSender;
 import com.application.soundcloud.services.UserService;
-import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
 
@@ -93,23 +90,23 @@ public class RegisterController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        user.setUrlForActivationCode(UUID.randomUUID().toString());
+        user.setUrlActivationCode(UUID.randomUUID().toString());
         user.setActivationCode(generateFiveDigitNumber());
         userRepository.save(user);
 
         String message = String.format(
                 "Hello, %s! \n" +
-                        "Welcome to Sweater. Your activation code: %s",
+                        "Welcome to FakeSoundcloud. Your activation code: %s",
                 user.getUsername(),
                 user.getActivationCode());
 
         mailSender.send(user.getEmail(), "Activation code", message);
 
-        return "redirect:/activate/" + user.getUrlForActivationCode();
+        return "redirect:/activate/" + user.getUrlActivationCode();
     }
 
     public int generateFiveDigitNumber() {
         Random random = new Random();
-        return 10000 + random.nextInt(90000); // Generates a number between 10000 and 99999
+        return 10000 + random.nextInt(90000);
     }
 }

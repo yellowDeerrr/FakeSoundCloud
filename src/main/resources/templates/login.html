@@ -33,18 +33,26 @@
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
                     <input type="password" name="password" class="form-control"
-                           required minlength="6" maxlength="10"/>
+                           required minlength="6" maxlength="24"/>
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <a th:href="@{/login/forgot}" class="text-secondary">Forgot password?</a>
             </div>
 
             <div>
                 <button type="submit" class="btn btn-primary">Log in</button>
             </div>
+
             <div class="container">
-                <h2 class="form-signin-heading">Login with OAuth 2.0</h2><table class="table table-striped">
-                <tbody><tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/github'">GitHub</a></td></tr>
-                <tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/google'">Google</a></td></tr>
-                </tbody></table>
+                <h2 class="form-signin-heading">Login with OAuth 2.0</h2>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/github'">GitHub</a></td></tr>
+                    <tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/google'">Google</a></td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>
