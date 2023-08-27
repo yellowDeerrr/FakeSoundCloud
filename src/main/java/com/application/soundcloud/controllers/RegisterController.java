@@ -1,6 +1,7 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.services.MailSender;
 import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.User;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Controller
 public class RegisterController {
@@ -26,6 +29,9 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -79,7 +85,16 @@ public class RegisterController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        user.setActivationCode(UUID.randomUUID().toString());
         userRepository.save(user);
+
+        String message = String.format(
+                "Hello, %s! \n" +
+                        "Welcome to Sweater. Please, visit next link: https://ec2-51-20-10-49.eu-north-1.compute.amazonaws.com/activate/%s",
+                user.getUsername(),
+                user.getActivationCode());
+
+        mailSender.send(user.getEmail(), "Activation code", message);
 
         return "register_success";
     }

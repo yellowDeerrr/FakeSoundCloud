@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Activate</title>
+</head>
+<body>
+<div th:if="${isActivated}">
+    <p>User successfully activated</p>
+    <h4><a href="/login">Click here to Login</a></h4>
+</div>
+<div th:if="${!isActivated}">
+    <p>Activation code is not found :(</p>
+    <a href="/">Main menu</a>
+</div>
+</body>
+</html>

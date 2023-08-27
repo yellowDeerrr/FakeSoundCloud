@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.application</groupId>
     <artifactId>SoundCloud</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.9-SNAPSHOT</version>
     <name>SoundCloud</name>
     <description>SoundCloud</description>
     <properties>
@@ -50,6 +50,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
 

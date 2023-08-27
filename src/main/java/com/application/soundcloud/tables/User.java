@@ -12,16 +12,18 @@ public class User {
     private String login;
     private String password;
     private String email;
+    private String activationCode;
     private String avatarUrl;
     public User() {
     }
 
-    public User(String username, String login, String password, String email, String avatarUrl) {
+    public User(String username, String login, String password, String email, String avatarUrl, String activationCode) {
         this.username = username;
         this.login = login;
         this.password = password;
         this.email = email;
         this.avatarUrl = avatarUrl;
+        this.activationCode = activationCode;
     }
 
     public int getId() {
@@ -71,5 +73,13 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }

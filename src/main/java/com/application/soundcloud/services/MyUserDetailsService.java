@@ -2,7 +2,9 @@ package com.application.soundcloud.services;
 
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.User;
+import com.nimbusds.openid.connect.sdk.validators.AuthorizationCodeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +32,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
+        }
+
+        if (user.getActivationCode() != null){
+            throw new UsernameNotFoundException("Check your email-");
         }
 
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));

@@ -35,6 +35,18 @@ public class UserService {
         }
     }
 
+    public boolean activateUser(String code){
+        User user = userRepository.findByActivationCode(code);
+
+        if (user == null){
+            return false;
+        }
+        user.setActivationCode(null);
+        userRepository.save(user);
+
+        return true;
+    }
+
     public String generateKeyForAvatarUrl(){
         Random random = new Random();
         StringBuilder stringBuilder = new StringBuilder();

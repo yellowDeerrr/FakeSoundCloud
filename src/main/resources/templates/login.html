@@ -16,7 +16,8 @@
     <div>
         <h1>Please sign in</h1>
     </div>
-    <div th:if="${loginError}" class="alert alert-danger" role="alert">Wrong user or password</div>
+    <div th:if="${loginError}" class="alert alert-danger" role="alert">Wrong user or password <br>if you didn't activate your email, check your email</div>
+
     <form th:action="'/login'"
           method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">

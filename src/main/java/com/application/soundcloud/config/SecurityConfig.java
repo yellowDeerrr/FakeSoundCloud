@@ -10,9 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService userService;
 
     @Autowired
-    private OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService;
+    private OAuth2UserService<OAuth2UserRequest, OAuth2User> OAuth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeHttpRequests()
                 .antMatchers("/@{accountName}/{songName}", "/new/song").authenticated()
-                .anyRequest().permitAll() // .anyRequest().hasRole("...")
+                .antMatchers("/", "/@{accountName}", "/login/", "/login-error/", "/register", "/files/**", "/activate/**").permitAll()
+                .anyRequest().authenticated() // .anyRequest().hasRole("...")
                 .and()
             .formLogin()
                 .loginPage("/login")
@@ -44,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login-error")
                 .permitAll()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+                .userService(OAuth2UserService);
     }
 
     @Override
