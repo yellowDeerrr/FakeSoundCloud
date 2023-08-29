@@ -1,6 +1,7 @@
 package com.application.soundcloud.tables;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Table(name = "_users")
 @Entity
@@ -16,6 +17,7 @@ public class User {
     private Integer activationCode;
     private String urlActivationCodeForResetPassword;
     private String avatarUrl;
+    private LocalDateTime createdAt;
     public User() {
     }
 
@@ -90,5 +92,13 @@ public class User {
 
     public void setUrlActivationCodeForResetPassword(String urlActivationCodeForResetPassword) {
         this.urlActivationCodeForResetPassword = urlActivationCodeForResetPassword;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
