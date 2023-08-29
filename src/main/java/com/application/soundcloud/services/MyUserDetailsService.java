@@ -35,7 +35,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         if (user.getActivationCode() != null){
-            throw new UsernameNotFoundException("Check your email-");
+            throw new UsernameNotFoundException("Check your email");
         }
 
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));

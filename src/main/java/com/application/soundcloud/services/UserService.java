@@ -62,7 +62,7 @@ public class UserService {
     public boolean checkEmailAndSendLink(String email){
         User user = userRepository.findByEmail(email);
 
-        if (user == null){
+        if (user == null || user.getUrlActivationCodeForResetPassword() != null){
             return false;
         }
         user.setUrlActivationCodeForResetPassword(UUID.randomUUID().toString());

@@ -1,10 +1,14 @@
 package com.application.soundcloud.services;
 
+import com.application.soundcloud.services.logs.BackendLogService;
+import com.application.soundcloud.tables.logs.BackendLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class MailSender {
