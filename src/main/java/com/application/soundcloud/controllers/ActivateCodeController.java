@@ -1,7 +1,7 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.services.UserService;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ public class ActivateCodeController {
     private UserService userService;
     @GetMapping("/activate/{urlActivationCode}")
     public String showActivatePage(@PathVariable String urlActivationCode, Model model){
-        User isActivated = userService.isActivateUser(urlActivationCode);
+        UserEntity isActivated = userService.isActivateUser(urlActivationCode);
 
         if (isActivated != null && isActivated.getUrlActivationCode() != null) {
             maskedEmail = userService.maskEmail(isActivated.getEmail());
@@ -32,7 +32,7 @@ public class ActivateCodeController {
 
     @PostMapping("/activate/{urlActivationCode}")
     public String checkActivateCode(@PathVariable String urlActivationCode, @RequestParam Integer code, Model model){
-        User checkActivationCode = userService.checkActivationCode(urlActivationCode, code);
+        UserEntity checkActivationCode = userService.checkActivationCode(urlActivationCode, code);
 
         if (checkActivationCode != null)
             return "register_success";

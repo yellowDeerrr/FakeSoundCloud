@@ -5,7 +5,7 @@ import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.Likes;
 import com.application.soundcloud.tables.Tracks;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +26,7 @@ public class Song {
 
     @GetMapping("/@{accountName}/{songName}")
     public String getPageWithSong(@PathVariable String accountName, @PathVariable String songName, Authentication authentication, Model model){
-        User author = userRepository.findByLogin(accountName);
+        UserEntity author = userRepository.findByLogin(accountName);
         if (author != null){
             Tracks track = tracksRepository.findByAuthorAndSongName(accountName, songName);
             if (track != null){

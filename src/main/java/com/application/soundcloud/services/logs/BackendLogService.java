@@ -40,7 +40,7 @@ public class BackendLogService {
     public void successfulResetPassword(BackendLog backendLog, String urlForResetPasswordOnEmail){
         backendLog.setLogLevel("INFO");
         backendLog.setLogTime(LocalDateTime.now());
-        backendLog.setMessage("Successfully reset password with code :" + urlForResetPasswordOnEmail);
+        backendLog.setMessage("Successfully reset password with code: " + urlForResetPasswordOnEmail);
 
         saveLog(backendLog);
     }

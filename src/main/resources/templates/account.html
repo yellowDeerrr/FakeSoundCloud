@@ -61,11 +61,11 @@
     }
 </style>
 <body>
-<div th:each="user : ${user}" th:switch="${userAvatar}">
-    <img th:case="'ownUserAvatar'" th:src="${user.avatarUrl}" class="avatar">
-    <img th:case="'userOauth2Avatar'" th:src="${user.avatarUrl}" class="avatar">
+<div th:each="userEntity : ${userEntity}" th:switch="${userAvatar}">
+    <img th:case="'ownUserAvatar'" th:src="${userEntity.avatarUrl}" class="avatar">
+    <img th:case="'userOauth2Avatar'" th:src="${userEntity.avatarUrl}" class="avatar">
     <img th:case="'standard'" th:src="${@environment.getProperty('url')} + 'files/avatar/standard/KpH8YmV4eT.jpg'" class="avatar">
-    <h1 th:text="${user.login}" class="font" id="accountName"></h1>
+    <h1 th:text="${userEntity.username}" class="font" id="accountName"></h1>
 </div>
 <div class="thumb">
     <figure th:each="song : ${songs}">

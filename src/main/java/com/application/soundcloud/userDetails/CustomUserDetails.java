@@ -1,61 +1,52 @@
 package com.application.soundcloud.userDetails;
 
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
-    private String email;
-    private Collection<? extends GrantedAuthority> authorities;
-
-    public CustomUserDetails(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.authorities = authorities;
+    private UserEntity userEntity;
+    public CustomUserDetails(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return userEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
-    }
-
-    // Метод для отримання email
-    public String getEmail() {
-        return email;
+        return userEntity.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Ваша логіка для перевірки чи не сплив термін дії акаунту
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Ваша логіка для перевірки чи акаунт не заблокований
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Ваша логіка для перевірки чи не сплив термін дії паролю
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Ваша логіка для перевірки чи акаунт активний
+        return true;
     }
 }

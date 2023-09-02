@@ -1,6 +1,6 @@
 package com.application.soundcloud.config;
 
-import com.application.soundcloud.services.MyUserDetailsService;
+import com.application.soundcloud.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,19 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private MyUserDetailsService userService;
+    private CustomUserDetailsService userService;
 
     @Autowired
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> OAuth2UserService;
@@ -34,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeHttpRequests()
                 .antMatchers("/@{accountName}/{songName}", "/new/song").authenticated()
                 .antMatchers("/", "/@{accountName}", "/login/**", "/login-error/", "/register", "/files/**", "/activate/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated() // .anyRequest().hasRole("...")
                 .and()
             .formLogin()

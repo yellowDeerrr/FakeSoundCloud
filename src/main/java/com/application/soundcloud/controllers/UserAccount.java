@@ -3,24 +3,17 @@ package com.application.soundcloud.controllers;
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.Tracks;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.security.Principal;
-import java.text.Normalizer;
 import java.util.List;
 
 @Controller
@@ -35,13 +28,13 @@ public class UserAccount {
     @GetMapping("/@{accountName}")
     public String getPageAccountName(@PathVariable String accountName, Model model){
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
-        User user = userRepository.findByUsername(accountName);
+        UserEntity userEntity = userRepository.findByUsername(accountName);
 
-        if (user != null){
-            model.addAttribute("user", user);
-            if (user.getAvatarUrl().contains(url + "files/avatar") && !user.getAvatarUrl().contains(url + "files/avatar/standard")){
+        if (userEntity != null){
+            model.addAttribute("user", userEntity);
+            if (userEntity.getAvatarUrl().contains(url + "files/avatar") && !userEntity.getAvatarUrl().contains(url + "files/avatar/standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
-            }else if (user.getAvatarUrl().equals(url + "files/avatar/standard/KpH8YmV4eT.jpg")){
+            }else if (userEntity.getAvatarUrl().equals(url + "files/avatar/standard/KpH8YmV4eT.jpg")){
                 model.addAttribute("userAvatar", "standard");
             }
             else {
@@ -61,7 +54,7 @@ public class UserAccount {
 
     @GetMapping("/you")
     public String viewYourAccount(Authentication authentication) {
-        User user;
+        UserEntity userEntity;
         if (authentication == null || !authentication.isAuthenticated()) {
             // Redirect to the homepage if the user is not authenticated
             return "redirect:/";
@@ -71,13 +64,13 @@ public class UserAccount {
         if (principal instanceof OAuth2User) {
             // Handle OAuth2 authentication
             OAuth2User oAuth2User = (OAuth2User) principal;
-            String username = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : oAuth2User.getAttribute("login");
             String email = oAuth2User.getAttribute("email");
-            user = userRepository.findByEmail(email);
-            if (user == null){
+            userEntity = userRepository.findByEmail(email);
+            String username = userEntity.getUsername();
+            if (userEntity == null){
                 return "redirect:/@" + username;
             }
-            return "redirect:/@" + user.getLogin();
+            return "redirect:/@" + userEntity.getLogin();
         } else if (principal instanceof UserDetails) {
             // Handle standard username/password authentication
             UserDetails userDetails = (UserDetails) principal;

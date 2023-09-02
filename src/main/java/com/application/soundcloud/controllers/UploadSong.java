@@ -1,6 +1,7 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.TracksRepository;
+import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.services.SongService;
 import com.application.soundcloud.tables.Tracks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class UploadSong {
     @Autowired
     private SongService songService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${pathToSoundCloudFiles}")
     private String path;
 
@@ -55,7 +59,7 @@ public class UploadSong {
         Object principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User){
             OAuth2User oAuth2User = (OAuth2User) principal;
-            nameAuthor = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : oAuth2User.getAttribute("login");
+            nameAuthor = userRepository.findByEmail(oAuth2User.getAttribute("email")).getUsername();
         } else if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
             nameAuthor = userDetails.getUsername();

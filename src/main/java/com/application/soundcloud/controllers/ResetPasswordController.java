@@ -4,7 +4,7 @@ import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.services.logs.BackendLogService;
 import com.application.soundcloud.services.logs.HttpRequestLogService;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.UserEntity;
 import com.application.soundcloud.tables.logs.BackendLog;
 import com.application.soundcloud.tables.logs.HttpRequestLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +54,11 @@ public class ResetPasswordController {
     @GetMapping("/login/forgot/{urlActivationCodeForResetPassword}")
     public String checkUrlActivationCodeForResetPasswordAndShowPage(HttpServletResponse response, HttpServletRequest request, @PathVariable String urlActivationCodeForResetPassword, Authentication authentication, Model model){
         HttpRequestLog httpRequestLog = new HttpRequestLog();
-        User user = userRepository.findByUrlActivationCodeForResetPassword(urlActivationCodeForResetPassword);
+        UserEntity userEntity = userRepository.findByUrlActivationCodeForResetPassword(urlActivationCodeForResetPassword);
 
         httpRequestLog.setUserId(getUserIdFromAuthenticatedUser(authentication));
 
-        if (user != null) {
+        if (userEntity != null) {
             model.addAttribute("wrongLink", "W");
             return "newPassword";
         }
@@ -87,9 +87,9 @@ public class ResetPasswordController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         BackendLog backendLog = new BackendLog();
         HttpRequestLog httpRequestLog = new HttpRequestLog();
-        User user = userRepository.findByUrlActivationCodeForResetPassword(urlActivationCodeForResetPassword);
+        UserEntity userEntity = userRepository.findByUrlActivationCodeForResetPassword(urlActivationCodeForResetPassword);
 
-        if (user == null) {
+        if (userEntity == null) {
             model.addAttribute("wrongLink", "Wrong link");
             model.addAttribute("errorMessage", "Wrong link");
 
@@ -102,12 +102,12 @@ public class ResetPasswordController {
             return "newPassword";
         }
 
-        if (newPassword.equals(repeatNewPassword) || !passwordEncoder.matches(newPassword, user.getPassword())) {
+        if (newPassword.equals(repeatNewPassword) || !passwordEncoder.matches(newPassword, userEntity.getPassword())) {
             String encodedPassword = passwordEncoder.encode(newPassword);
 
-            user.setPassword(encodedPassword);
-            user.setUrlActivationCodeForResetPassword(null);
-            userRepository.save(user);
+            userEntity.setPassword(encodedPassword);
+            userEntity.setUrlActivationCodeForResetPassword(null);
+            userRepository.save(userEntity);
 
             model.addAttribute("wrongLink", "W");
             model.addAttribute("errorMessage", "Password changed successfully");

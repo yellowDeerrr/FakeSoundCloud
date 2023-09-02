@@ -1,9 +1,11 @@
 package com.application.soundcloud.controllers;
 
+import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.services.MailSender;
 import com.application.soundcloud.services.UserService;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.Role;
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,8 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class RegisterController {
@@ -31,6 +32,8 @@ public class RegisterController {
 
     @Autowired
     private MailSender mailSender;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Value("${url}")
     private String url;
@@ -40,22 +43,22 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userEntity", new UserEntity());
 
         return "signup_form";
     }
 
     @PostMapping("/register")
-    public String checkInfoUserWhileRegistration(Model model, User user, @RequestParam MultipartFile avatarFile) {
-        String login = user.getLogin();
+    public String checkInfoUserWhileRegistration(Model model, UserEntity userEntity, @RequestParam MultipartFile avatarFile) {
+        String login = userEntity.getLogin();
 
-        if (userRepository.findByLogin(user.getLogin()) != null){
+        if (userRepository.findByLogin(userEntity.getLogin()) != null){
             model.addAttribute("errorMessage", "Login is already using");
             return "signup_form";
-        }if (userRepository.findByEmail(user.getEmail()) != null){
+        }if (userRepository.findByEmail(userEntity.getEmail()) != null){
             model.addAttribute("errorMessage", "Email is already using");
             return "signup_form";
-        }if (userRepository.findByUsername(user.getUsername()) != null){
+        }if (userRepository.findByUsername(userEntity.getUsername()) != null){
             model.addAttribute("errorMessage", "Username is already using");
         }
         if (avatarFile != null && !avatarFile.isEmpty()){
@@ -74,7 +77,7 @@ public class RegisterController {
                     Files.createDirectories(pathToAvatarFile.getParent());
                     Files.write(pathToAvatarFile, bytesOfAvatarFile);
 
-                    user.setAvatarUrl(url + "files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                    userEntity.setAvatarUrl(url + "files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
                 } else {
                     model.addAttribute("errorMessage", "Add photo");
                     return "signup_form";
@@ -84,25 +87,29 @@ public class RegisterController {
                 return "signup_form";
             }
         }else if (avatarFile == null || avatarFile.isEmpty()){
-            user.setAvatarUrl(url + "files/avatar/standard/KpH8YmV4eT.jpg");
+            userEntity.setAvatarUrl(url + "files/avatar/standard/KpH8YmV4eT.jpg");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedPassword);
 
-        user.setUrlActivationCode(UUID.randomUUID().toString());
-        user.setActivationCode(generateFiveDigitNumber());
-        userRepository.save(user);
+        userEntity.setUrlActivationCode(UUID.randomUUID().toString());
+        userEntity.setActivationCode(generateFiveDigitNumber());
+
+        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
+        userEntity.setRoles(Collections.singletonList(roles));
+
+        userRepository.save(userEntity);
 
         String message = String.format(
                 "Hello, %s! \n" +
                         "Welcome to FakeSoundcloud. Your activation code: %s",
-                user.getUsername(),
-                user.getActivationCode());
+                userEntity.getUsername(),
+                userEntity.getActivationCode());
 
-        mailSender.send(user.getEmail(), "Activation code", message);
+        mailSender.send(userEntity.getEmail(), "Activation code", message);
 
-        return "redirect:/activate/" + user.getUrlActivationCode();
+        return "redirect:/activate/" + userEntity.getUrlActivationCode();
     }
 
     public int generateFiveDigitNumber() {

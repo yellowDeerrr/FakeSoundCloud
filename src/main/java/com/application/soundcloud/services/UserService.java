@@ -1,7 +1,7 @@
 package com.application.soundcloud.services;
 
 import com.application.soundcloud.repositories.UserRepository;
-import com.application.soundcloud.tables.User;
+import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,58 +24,58 @@ public class UserService {
     }
 
     public void checkAndAddUser(String username, String email, String avatarUrl) {
-        User user = new User();
+        UserEntity userEntity = new UserEntity();
 
         if (userRepository.findByEmail(email) == null) {
-            user.setAvatarUrl(avatarUrl);
-            user.setEmail(email);
+            userEntity.setAvatarUrl(avatarUrl);
+            userEntity.setEmail(email);
             if (userRepository.findByLogin(username) == null){
-                user.setLogin(username);
+                userEntity.setLogin(username);
             }else{
-                user.setLogin(generateUniqueLogin(username));
+                userEntity.setLogin(generateUniqueLogin(username));
             }if (userRepository.findByUsername(username) == null){
-                user.setUsername(username);
+                userEntity.setUsername(username);
             }else{
-                user.setUsername(generateUniqueUsername(username));
+                userEntity.setUsername(generateUniqueUsername(username));
             }
-            userRepository.save(user);
+            userRepository.save(userEntity);
         }
     }
 
-    public User isActivateUser(String urlForActivationCode){
+    public UserEntity isActivateUser(String urlForActivationCode){
         return userRepository.findByUrlActivationCode(urlForActivationCode);
     }
 
 
-    public User checkActivationCode(String urlForActivationCode, Integer code) {
-        User user = userRepository.findByUrlActivationCodeAndActivationCode(urlForActivationCode, code);
+    public UserEntity checkActivationCode(String urlForActivationCode, Integer code) {
+        UserEntity userEntity = userRepository.findByUrlActivationCodeAndActivationCode(urlForActivationCode, code);
 
-        if (user == null){
-            return user;
+        if (userEntity == null){
+            return userEntity;
         }
-        user.setUrlActivationCode(null);
-        user.setActivationCode(null);
-        userRepository.save(user);
+        userEntity.setUrlActivationCode(null);
+        userEntity.setActivationCode(null);
+        userRepository.save(userEntity);
 
-        return user;
+        return userEntity;
     }
     public boolean checkEmailAndSendLink(String email){
-        User user = userRepository.findByEmail(email);
+        UserEntity userEntity = userRepository.findByEmail(email);
 
-        if (user == null || user.getUrlActivationCodeForResetPassword() != null){
+        if (userEntity == null || userEntity.getUrlActivationCodeForResetPassword() != null){
             return false;
         }
-        user.setUrlActivationCodeForResetPassword(UUID.randomUUID().toString());
-        userRepository.save(user);
+        userEntity.setUrlActivationCodeForResetPassword(UUID.randomUUID().toString());
+        userRepository.save(userEntity);
 
         String message = String.format(
                 "Hello, %s! \n" +
                         "Your reset password link: %slogin/forgot/%s",
-                user.getUsername(),
+                userEntity.getUsername(),
                 url,
-                user.getUrlActivationCodeForResetPassword());
+                userEntity.getUrlActivationCodeForResetPassword());
 
-        mailSender.send(user.getEmail(), "Reset password", message);
+        mailSender.send(userEntity.getEmail(), "Reset password", message);
 
         return true;
     }
@@ -90,7 +90,7 @@ public class UserService {
             stringBuilder.append(randomSymbol);
         }
         String res = stringBuilder.toString();
-        User checkUsersKey = userRepository.findByAvatarUrl(res);
+        UserEntity checkUsersKey = userRepository.findByAvatarUrl(res);
         if (checkUsersKey == null) {
             return res;
         } else {

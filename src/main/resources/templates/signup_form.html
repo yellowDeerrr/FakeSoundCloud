@@ -19,13 +19,13 @@
 
     <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}" ></div>
 
-    <form action="/register" th:object="${user}"
+    <form action="/register" th:object="${userEntity}"
           method="post" style="max-width: 600px; margin: 0 auto;" enctype="multipart/form-data">
         <div class="m-3">
             <div class="form-group row">
                 <label class="col-4 col-form-label">Username: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{username}" class="form-control"
+                    <input type="text" th:field="*{username}" autocomplete="off" class="form-control"
                            required minlength="2" maxlength="55" />
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Login: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{login}" class="form-control"
+                    <input type="text" th:field="*{login}" autocomplete="off" class="form-control"
                            required minlength="2" maxlength="55" />
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Email: </label>
                 <div class="col-8">
-                    <input type="email" th:field="*{email}" class="form-control"
+                    <input type="email" th:field="*{email}" autocomplete="off" class="form-control"
                            required minlength="2" maxlength="50" />
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
-                    <input type="password" th:field="*{password}" class="form-control"
+                    <input type="password" th:field="*{password}" autocomplete="off" class="form-control"
                            required minlength="6" maxlength="24"/>
                 </div>
             </div>
