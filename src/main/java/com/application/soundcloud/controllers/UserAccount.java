@@ -31,7 +31,7 @@ public class UserAccount {
         UserEntity userEntity = userRepository.findByUsername(accountName);
 
         if (userEntity != null){
-            model.addAttribute("user", userEntity);
+            model.addAttribute("userEntity", userEntity);
             if (userEntity.getAvatarUrl().contains(url + "files/avatar") && !userEntity.getAvatarUrl().contains(url + "files/avatar/standard")){
                 model.addAttribute("userAvatar", "ownUserAvatar");
             }else if (userEntity.getAvatarUrl().equals(url + "files/avatar/standard/KpH8YmV4eT.jpg")){

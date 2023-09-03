@@ -20,19 +20,27 @@ public class BackendLogService {
     public void saveLog(BackendLog log) {
         logRepository.save(log);
     }
-
-    public void successfulSentUrlForResetPasswordOnEmail(String userEmail, BackendLog backendLog){
+    public void sendActivationCodeForRegister(String specifiedEmail, Integer activationCode, BackendLog backendLog){
         backendLog.setLogLevel("INFO");
         backendLog.setLogTime(LocalDateTime.now());
-        backendLog.setMessage("Sent url for reset password to email: " + userEmail);
+        backendLog.setMessage("Send activation code to email:" + specifiedEmail + " , with activation code: " + activationCode);
 
         saveLog(backendLog);
     }
 
-    public void errorSentUrlForResetPasswordOnEmail(String userEmail, BackendLog backendLog){
+    public void sendUrlForResetPasswordOnEmail(String specifiedEmail, BackendLog backendLog){
+        backendLog.setLogLevel("INFO");
+        backendLog.setLogTime(LocalDateTime.now());
+        backendLog.setMessage("Sent url for reset password to email: " + specifiedEmail);
+
+        saveLog(backendLog);
+    }
+
+    //Email doesn't exist or already have 'urlForResetPasswordOnEmail'
+    public void errorSendUrlForResetPasswordOnEmail(String specifiedEmail, BackendLog backendLog){
         backendLog.setLogLevel("ERROR");
         backendLog.setLogTime(LocalDateTime.now());
-        backendLog.setMessage("Attempted to find user for password reset with email: " + userEmail);
+        backendLog.setMessage("Attempted to find user for password reset with email: " + specifiedEmail);
 
         saveLog(backendLog);
     }
@@ -41,6 +49,14 @@ public class BackendLogService {
         backendLog.setLogLevel("INFO");
         backendLog.setLogTime(LocalDateTime.now());
         backendLog.setMessage("Successfully reset password with code: " + urlForResetPasswordOnEmail);
+
+        saveLog(backendLog);
+    }
+
+    // Wrong login, email or username
+    public void errorRegisterUser(BackendLog backendLog){
+        backendLog.setLogLevel("WARN");
+        backendLog.setLogTime(LocalDateTime.now());
 
         saveLog(backendLog);
     }

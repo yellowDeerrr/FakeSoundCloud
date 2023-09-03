@@ -1,29 +1,80 @@
 package com.application.soundcloud.services;
 
+import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.tables.Role;
 import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
 @Service
 public class UserService {
-    @Autowired
-    private MailSender mailSender;
-    @Autowired
+    private MailSenderService mailSenderService;
     private final UserRepository userRepository;
+    private RoleRepository roleRepository;
     @Value("${url}")
     private String url;
+    @Value("${pathToSoundCloudFiles}")
+    private String path;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, MailSenderService mailSenderService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.mailSenderService = mailSenderService;
+        this.roleRepository = roleRepository;
     }
 
-    public void checkAndAddUser(String username, String email, String avatarUrl) {
+    public int generateFiveDigitNumber() {
+        Random random = new Random();
+        return 10000 + random.nextInt(90000);
+    }
+
+    public String[] checkAvatarAndLoadAvatar(String login, UserEntity userEntity, MultipartFile avatarFile){
+        String[] res = new String[2]; // res[0] - avatarUrl, res[1] - message with error or successful
+
+        String avatarUrlKey = generateKeyForAvatarUrl();
+        try {
+            byte[] bytesOfAvatarFile = avatarFile.getBytes();
+
+            String originalFilenameOfAvatarFile = avatarFile.getOriginalFilename();
+
+            if (originalFilenameOfAvatarFile != null && !avatarFile.isEmpty()) {
+                String fileExtensionAvatar = originalFilenameOfAvatarFile.substring(originalFilenameOfAvatarFile.lastIndexOf(".") + 1);
+
+                String avatarUrlKeyWithExtensionAvatarFile = avatarUrlKey + "." + fileExtensionAvatar;
+
+                Path pathToAvatarFile = Paths.get(path + "avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile);
+                Files.createDirectories(pathToAvatarFile.getParent());
+                Files.write(pathToAvatarFile, bytesOfAvatarFile);
+
+                res[0] = url + "files/avatar/@" + login + "/" + avatarUrlKeyWithExtensionAvatarFile;
+            } else {
+                res[1] = "Add photo";
+                return res;
+            }
+        } catch (IOException e) {
+            res[1] = "Add photo";
+            return res;
+        }
+
+        res[1] = "successful";
+        return res;
+    }
+
+    public void checkAndAddUserForOauth2(String username, String email, String avatarUrl) {
         UserEntity userEntity = new UserEntity();
 
         if (userRepository.findByEmail(email) == null) {
@@ -75,7 +126,7 @@ public class UserService {
                 url,
                 userEntity.getUrlActivationCodeForResetPassword());
 
-        mailSender.send(userEntity.getEmail(), "Reset password", message);
+        mailSenderService.send(userEntity.getEmail(), "Reset password", message);
 
         return true;
     }
@@ -131,7 +182,7 @@ public class UserService {
         if (parts.length == 2) {
             String username = parts[0];
             String domain = parts[1];
-            int lengthToShow = 2; // Кількість символів, які залишити видимими
+            int lengthToShow = 2;
             String maskedUsername = username.substring(0, Math.min(lengthToShow, username.length())) + "*****";
             return maskedUsername + "@" + domain;
         }

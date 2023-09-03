@@ -43,10 +43,10 @@ public class ResetPasswordController {
 
         if (userService.checkEmailAndSendLink(email)){
             model.addAttribute("maskedEmail", userService.maskEmail(email));
-            backendLogService.successfulSentUrlForResetPasswordOnEmail(email, backendLog);
+            backendLogService.sendUrlForResetPasswordOnEmail(email, backendLog);
         } else{
             model.addAttribute("errorMessage", "Email doesn't exist \nOr we already sent url for reset password");
-            backendLogService.errorSentUrlForResetPasswordOnEmail(email, backendLog);
+            backendLogService.errorSendUrlForResetPasswordOnEmail(email, backendLog);
         }
 
         return "enterEmailForResetPassword";

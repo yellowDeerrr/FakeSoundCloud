@@ -26,7 +26,7 @@ public class AuthenticationSuccessListener {
             String login = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : oAuth2User.getAttribute("login");
             String email = oAuth2User.getAttribute("email");
             String avatarUrl = oAuth2User.getAttribute("picture");
-            userService.checkAndAddUser(login, email, avatarUrl);
+            userService.checkAndAddUserForOauth2(login, email, avatarUrl);
         }
     }
 }
