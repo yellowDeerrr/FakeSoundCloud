@@ -2,12 +2,14 @@ package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.services.GeoIpService;
 import com.application.soundcloud.services.MailSenderService;
 import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.services.logs.BackendLogService;
 import com.application.soundcloud.tables.Role;
 import com.application.soundcloud.tables.UserEntity;
 import com.application.soundcloud.tables.logs.BackendLog;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
@@ -29,10 +33,10 @@ import java.util.UUID;
 public class RegisterController {
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private GeoIpService geoIpService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private MailSenderService mailSenderService;
     @Autowired
@@ -54,7 +58,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String checkInfoUserWhileRegistration(Model model, UserEntity userEntity, Authentication authentication, @RequestParam MultipartFile avatarFile) {
+    public String checkInfoUserWhileRegistration(Model model, UserEntity userEntity, HttpServletRequest request, Authentication authentication, @RequestParam MultipartFile avatarFile) throws IOException, GeoIp2Exception {
         BackendLog backendLog = new BackendLog();
         backendLog.setUserId(getUserIdFromAuthenticatedUser(authentication));
         String login = userEntity.getLogin();
@@ -83,7 +87,7 @@ public class RegisterController {
             return "signup_form";
         }
         if (avatarFile != null && !avatarFile.isEmpty()){
-            String[] message = userService.checkAvatarAndLoadAvatar(login, userEntity, avatarFile);
+            String[] message = userService.checkAvatarAndLoadAvatar(login, avatarFile);
             if (!message[1].equals("successful")){
                 model.addAttribute("errorMessage", message);
                 return "signup_form";
@@ -105,6 +109,7 @@ public class RegisterController {
 
         userEntity.setCreatedAt(LocalDateTime.now());
 
+        userEntity.setCountry(geoIpService.getCountryNameByIp(request.getRemoteAddr()));
         userRepository.save(userEntity);
 
         String message = String.format(

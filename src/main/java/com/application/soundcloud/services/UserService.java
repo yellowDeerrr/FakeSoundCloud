@@ -2,11 +2,10 @@ package com.application.soundcloud.services;
 
 import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
-import com.application.soundcloud.tables.Role;
 import com.application.soundcloud.tables.UserEntity;
+import com.maxmind.geoip2.DatabaseReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,11 +13,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -42,7 +41,7 @@ public class UserService {
         return 10000 + random.nextInt(90000);
     }
 
-    public String[] checkAvatarAndLoadAvatar(String login, UserEntity userEntity, MultipartFile avatarFile){
+    public String[] checkAvatarAndLoadAvatar(String login, MultipartFile avatarFile){
         String[] res = new String[2]; // res[0] - avatarUrl, res[1] - message with error or successful
 
         String avatarUrlKey = generateKeyForAvatarUrl();
@@ -72,6 +71,21 @@ public class UserService {
 
         res[1] = "successful";
         return res;
+    }
+
+    public Map<String, Double> getUsersByCountryPercentage() {
+        List<UserEntity> users = userRepository.findAll();
+
+        Map<String, Long> countryCounts = users.stream()
+                .collect(Collectors.groupingBy(user -> user.getCountry(), Collectors.counting()));
+
+        long totalUsers = users.size();
+
+        return countryCounts.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> (double) entry.getValue() / totalUsers * 100.0
+                ));
     }
 
     public void checkAndAddUserForOauth2(String username, String email, String avatarUrl) {
