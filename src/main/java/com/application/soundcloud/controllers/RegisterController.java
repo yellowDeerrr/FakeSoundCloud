@@ -1,15 +1,16 @@
 package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.RoleRepository;
+import com.application.soundcloud.repositories.SaveUserAgentCodeRepository;
 import com.application.soundcloud.repositories.UserRepository;
-import com.application.soundcloud.services.GeoIpService;
 import com.application.soundcloud.services.MailSenderService;
 import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.services.logs.BackendLogService;
 import com.application.soundcloud.tables.Role;
+import com.application.soundcloud.tables.SaveUserAgentCode;
 import com.application.soundcloud.tables.UserEntity;
 import com.application.soundcloud.tables.logs.BackendLog;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -21,10 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
@@ -34,8 +35,6 @@ public class RegisterController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private GeoIpService geoIpService;
-    @Autowired
     private UserService userService;
     @Autowired
     private MailSenderService mailSenderService;
@@ -43,6 +42,8 @@ public class RegisterController {
     private BackendLogService backendLogService;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private SaveUserAgentCodeRepository saveUserAgentCodeRepository;
 
     @Value("${url}")
     private String url;
@@ -58,7 +59,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String checkInfoUserWhileRegistration(Model model, UserEntity userEntity, HttpServletRequest request, Authentication authentication, @RequestParam MultipartFile avatarFile) throws IOException, GeoIp2Exception {
+    public String checkInfoUserWhileRegistration(Model model, UserEntity userEntity, Authentication authentication, @RequestParam MultipartFile avatarFile) {
         BackendLog backendLog = new BackendLog();
         backendLog.setUserId(getUserIdFromAuthenticatedUser(authentication));
         String login = userEntity.getLogin();
@@ -89,7 +90,7 @@ public class RegisterController {
         if (avatarFile != null && !avatarFile.isEmpty()){
             String[] message = userService.checkAvatarAndLoadAvatar(login, avatarFile);
             if (!message[1].equals("successful")){
-                model.addAttribute("errorMessage", message);
+                model.addAttribute("errorMessage", message[1]);
                 return "signup_form";
             }
             userEntity.setAvatarUrl(message[0]);
@@ -109,7 +110,6 @@ public class RegisterController {
 
         userEntity.setCreatedAt(LocalDateTime.now());
 
-        userEntity.setCountry(geoIpService.getCountryNameByIp(request.getRemoteAddr()));
         userRepository.save(userEntity);
 
         String message = String.format(
@@ -121,6 +121,12 @@ public class RegisterController {
         mailSenderService.send(userEntity.getEmail(), "Activation code", message);
         backendLogService.sendActivationCodeForRegister(userEntity.getEmail(), userEntity.getActivationCode(), backendLog);
 
+        SaveUserAgentCode saveUserAgentCode = new SaveUserAgentCode();
+
+        saveUserAgentCode.setUserId(userEntity);
+        saveUserAgentCode.setCode(UUID.randomUUID().toString());
+
+        saveUserAgentCodeRepository.save(saveUserAgentCode);
         return "redirect:/activate/" + userEntity.getUrlActivationCode();
     }
 

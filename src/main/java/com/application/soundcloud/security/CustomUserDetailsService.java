@@ -1,13 +1,12 @@
-package com.application.soundcloud.services;
+package com.application.soundcloud.security;
 
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.tables.Role;
 import com.application.soundcloud.tables.UserEntity;
-import com.application.soundcloud.userDetails.CustomUserDetails;
+import com.application.soundcloud.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    public CustomUserDetails loadUserByUserEntity(UserEntity userEntity){
+        return new CustomUserDetails(userEntity);
+    }
 
     @Override
     public CustomUserDetails loadUserByUsername(String loginOrEmail) throws UsernameNotFoundException {

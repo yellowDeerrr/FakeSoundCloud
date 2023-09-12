@@ -1,10 +1,9 @@
 package com.application.soundcloud.config;
 
-import com.application.soundcloud.services.CustomUserDetailsService;
+import com.application.soundcloud.security.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,13 +14,12 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
-    private CustomUserDetailsService userService;
-
+    private CustomAuthenticationProvider customAuthenticationProvider;
     @Autowired
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> OAuth2UserService;
 
@@ -30,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeHttpRequests()
-                .antMatchers("/@{accountName}/{songName}", "/new/song").authenticated()
+                .antMatchers("/@{accountName}/{songName}", "/new/song", "/login-successful").authenticated()
                 .antMatchers("/", "/@{accountName}", "/login/**", "/login-error/", "/register", "/files/**", "/activate/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated() // .anyRequest().hasRole("...")
@@ -38,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login-error")
+                .defaultSuccessUrl("/login-successful")
                 .permitAll()
                 .and()
             .logout().logoutSuccessUrl("/").permitAll()
@@ -51,9 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(passwordEncoder());;
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(customAuthenticationProvider);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

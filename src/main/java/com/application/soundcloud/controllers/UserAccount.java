@@ -62,23 +62,24 @@ public class UserAccount {
 
         Object principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User) {
-            // Handle OAuth2 authentication
             OAuth2User oAuth2User = (OAuth2User) principal;
+
             String email = oAuth2User.getAttribute("email");
             userEntity = userRepository.findByEmail(email);
             String username = userEntity.getUsername();
             if (userEntity == null){
                 return "redirect:/@" + username;
             }
+
             return "redirect:/@" + userEntity.getLogin();
         } else if (principal instanceof UserDetails) {
-            // Handle standard username/password authentication
             UserDetails userDetails = (UserDetails) principal;
+
             String username = userDetails.getUsername();
-            // You can use userDetails to get more information about the user if needed
+            System.out.println(username);
+
             return "redirect:/@" + username;
         } else {
-            // Handle other types of authentication (if needed)
             return "redirect:/";
         }
     }

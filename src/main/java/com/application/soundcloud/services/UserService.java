@@ -2,8 +2,10 @@ package com.application.soundcloud.services;
 
 import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.services.analytic.UserAgentService;
 import com.application.soundcloud.tables.UserEntity;
-import com.maxmind.geoip2.DatabaseReader;
+//import com.maxmind.geoip2.DatabaseReader;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,15 @@ import java.util.stream.Collectors;
 public class UserService {
     private MailSenderService mailSenderService;
     private final UserRepository userRepository;
-    private RoleRepository roleRepository;
     @Value("${url}")
     private String url;
     @Value("${pathToSoundCloudFiles}")
     private String path;
 
     @Autowired
-    public UserService(UserRepository userRepository, MailSenderService mailSenderService, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, MailSenderService mailSenderService) {
         this.userRepository = userRepository;
         this.mailSenderService = mailSenderService;
-        this.roleRepository = roleRepository;
     }
 
     public int generateFiveDigitNumber() {
@@ -106,6 +106,8 @@ public class UserService {
             userRepository.save(userEntity);
         }
     }
+
+
 
     public UserEntity isActivateUser(String urlForActivationCode){
         return userRepository.findByUrlActivationCode(urlForActivationCode);
