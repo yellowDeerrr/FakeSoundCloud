@@ -8,7 +8,6 @@ import com.application.soundcloud.tables.UserEntity;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -54,7 +53,7 @@ public class LoginController {
             if (saveUserAgentCode.getCode() == null)
                 return "redirect:/";
             else {
-                userAgentService.addUserAgentInDB(userEntity, userAgent, request);
+                userAgentService.addUserAgentInDB(userEntity, userAgent, request.getRemoteAddr());
 
                 saveUserAgentCode.setCode(null);
                 saveUserAgentCodeRepository.save(saveUserAgentCode);

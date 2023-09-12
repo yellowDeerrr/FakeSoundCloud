@@ -20,7 +20,7 @@ public class UserAgentService {
     private GeoIpService geoIpService;
     @Autowired
     private UserAgentRepository userAgentRepository;
-    public void addUserAgentInDB(UserEntity userEntity, UserAgent userAgent, HttpServletRequest request) throws IOException, GeoIp2Exception {
+    public void addUserAgentInDB(UserEntity userEntity, UserAgent userAgent, String remoteAddr) throws IOException, GeoIp2Exception {
         UserAgentEntity userAgentEntity = new UserAgentEntity();
 
         userAgentEntity.setBrowser(userAgent.getBrowser().getGroup().getName());
@@ -33,7 +33,7 @@ public class UserAgentService {
         userAgentEntity.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 
         userAgentEntity.setUserId(userEntity);
-//        userEntity.setCountry(geoIpService.getCountryNameByIp(request.getRemoteAddr()));
+        userAgentEntity.setCountry(geoIpService.getCountryNameByIp(remoteAddr));
         userAgentEntity.setTime(LocalDateTime.now());
 
         userAgentRepository.save(userAgentEntity);

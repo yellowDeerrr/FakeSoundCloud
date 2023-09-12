@@ -20,7 +20,6 @@ public class UserEntity {
     private String urlActivationCodeForResetPassword;
     private String avatarUrl;
     private LocalDateTime createdAt;
-    private String country;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -108,13 +107,6 @@ public class UserEntity {
         this.createdAt = createdAt;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 
     public List<Role> getRoles() {
         return roles;

@@ -107,4 +107,20 @@ public class UserAgentEntity {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "UserAgentEntity{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", country='" + country + '\'' +
+                ", operatingSystem='" + operatingSystem + '\'' +
+                ", operatingSystemGroup='" + operatingSystemGroup + '\'' +
+                ", deviceType='" + deviceType + '\'' +
+                ", browser='" + browser + '\'' +
+                ", browseVersion='" + browseVersion + '\'' +
+                ", browseType='" + browseType + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }
