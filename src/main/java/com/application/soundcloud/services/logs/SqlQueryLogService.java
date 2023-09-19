@@ -5,6 +5,8 @@ import com.application.soundcloud.tables.logs.SqlQueryLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class SqlQueryLogService {
 
@@ -19,7 +21,18 @@ public class SqlQueryLogService {
         logRepository.save(log);
     }
 
-    // Other methods related to log processing
+    public void saveSqlQueryLog(String action, Long recordId, Long userId, Long actionBy, String table){
+        SqlQueryLog sqlQueryLog = new SqlQueryLog();
+
+        sqlQueryLog.setTimestamp(LocalDateTime.now());
+        sqlQueryLog.setAction(action);
+        sqlQueryLog.setRecordId(recordId);
+        sqlQueryLog.setUserId(userId);
+        sqlQueryLog.setActionBy(actionBy);
+        sqlQueryLog.setTable(table);
+
+        saveLog(sqlQueryLog);
+    }
 }
 
 

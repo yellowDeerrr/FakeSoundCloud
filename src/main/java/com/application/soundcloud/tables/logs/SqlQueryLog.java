@@ -6,25 +6,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "sql_query_logs")
 public class SqlQueryLog {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "execution_time")
-    private LocalDateTime executionTime;
-
-    @Column(name = "query_text")
-    private String queryText;
-
-    @Column(name = "query_type")
-    private String queryType;
-
+    @Column(name = "timestamp")
+    private LocalDateTime timestamp;
+    @Column(name = "action")
+    private String action;
+    @Column(name = "record_id")
+    private Long recordId;
     @Column(name = "user_id")
     private Long userId;
-
-    @Column(name = "success")
-    private boolean success;
+    @Column(name = "action_by")
+    private Long actionBy;
+    @Column(name = "table_name")
+    private String table;
 
     public SqlQueryLog() {
     }
@@ -37,28 +33,28 @@ public class SqlQueryLog {
         this.id = id;
     }
 
-    public LocalDateTime getExecutionTime() {
-        return executionTime;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setExecutionTime(LocalDateTime executionTime) {
-        this.executionTime = executionTime;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public String getQueryText() {
-        return queryText;
+    public String getAction() {
+        return action;
     }
 
-    public void setQueryText(String queryText) {
-        this.queryText = queryText;
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    public String getQueryType() {
-        return queryType;
+    public Long getRecordId() {
+        return recordId;
     }
 
-    public void setQueryType(String queryType) {
-        this.queryType = queryType;
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
     }
 
     public Long getUserId() {
@@ -69,11 +65,19 @@ public class SqlQueryLog {
         this.userId = userId;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public Long getActionBy() {
+        return actionBy;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setActionBy(Long actionBy) {
+        this.actionBy = actionBy;
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 }

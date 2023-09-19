@@ -1,4 +1,4 @@
-package com.application.soundcloud.controllers;
+package com.application.soundcloud.controllers.registerAndLogin;
 
 import com.application.soundcloud.services.UserService;
 import com.application.soundcloud.tables.UserEntity;

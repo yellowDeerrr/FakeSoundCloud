@@ -1,4 +1,4 @@
-package com.application.soundcloud.controllers;
+package com.application.soundcloud.controllers.registerAndLogin;
 
 import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.SaveUserAgentCodeRepository;
@@ -10,7 +10,6 @@ import com.application.soundcloud.tables.Role;
 import com.application.soundcloud.tables.SaveUserAgentCode;
 import com.application.soundcloud.tables.UserEntity;
 import com.application.soundcloud.tables.logs.BackendLog;
-import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,10 +21,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;

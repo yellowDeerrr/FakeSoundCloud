@@ -1,11 +1,9 @@
 package com.application.soundcloud.services;
 
-import com.application.soundcloud.repositories.RoleRepository;
 import com.application.soundcloud.repositories.UserRepository;
-import com.application.soundcloud.services.analytic.UserAgentService;
+import com.application.soundcloud.repositories.analytic.UserAgentRepository;
 import com.application.soundcloud.tables.UserEntity;
-//import com.maxmind.geoip2.DatabaseReader;
-import eu.bitwalker.useragentutils.UserAgent;
+import com.application.soundcloud.tables.analytic.UserAgentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,10 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,21 +66,6 @@ public class UserService {
 
         res[1] = "successful";
         return res;
-    }
-
-    public Map<String, Double> getUsersByCountryPercentage() {
-        List<UserEntity> users = userRepository.findAll();
-
-        Map<String, Long> countryCounts = users.stream()
-                .collect(Collectors.groupingBy(user -> user.getCountry(), Collectors.counting()));
-
-        long totalUsers = users.size();
-
-        return countryCounts.entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> (double) entry.getValue() / totalUsers * 100.0
-                ));
     }
 
     public void checkAndAddUserForOauth2(String username, String email, String avatarUrl) {

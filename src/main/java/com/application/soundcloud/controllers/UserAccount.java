@@ -2,6 +2,7 @@ package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.security.CustomUserDetails;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,7 @@ public class UserAccount {
             }
 
             return "redirect:/@" + userEntity.getLogin();
-        } else if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
+        } else if (principal instanceof CustomUserDetails userDetails) {
 
             String username = userDetails.getUsername();
             System.out.println(username);

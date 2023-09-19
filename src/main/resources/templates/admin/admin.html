@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Page</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between; /* Вирівнює елементи по краях контейнера */
+    }
+
+    .section {
+      flex: 1; /* Розширює секції на всю доступну ширину контейнера */
+      padding: 20px;
+    }
+
+    .country-bar {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 10px;
+    }
+
+    .country-name {
+      width: 150px;
+    }
+    .country-percent {
+      width: 50px;
+    }
+
+    .progress-container {
+      width: 300px;
+      background-color: #ccc;
+    }
+
+    .progress-bar {
+      height: 30px;
+      width: 0;
+      background-color: red;
+      transition: width 0.5s ease-in-out;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+<h1>Admin Page</h1>
+<a href="/admin/info">Users, Roles, Tracks etc</a>
+<a href="/admin/logs">Logs</a>
+
+<div class="container">
+  <div style="margin-top: 25px;" class="section">
+  <h2>User's country</h2>
+  <div th:each="country : ${usersByCountryPercentage}">
+    <div class="progress-container">
+      <div class="progress-bar" th:style="'width: ' + ${country.value} + '%;'"></div>
+    </div>
+    <div class="country-bar">
+      <div class="country-name" th:text="${country.key}">Country</div>
+      <div class="country-percent" th:text="${country.value + '%'}">Percent</div>
+    </div>
+  </div>
+</div>
+
+  <div style="margin-top: 50px" class="section">
+    <h2>User's operation system</h2>
+    <div th:each="os : ${usersByOperatingSystemGroupPercentage}">
+      <div class="progress-container">
+        <div class="progress-bar" th:style="'width: ' + ${os.value} + '%;'"></div>
+      </div>
+      <div class="country-bar">
+        <div class="country-name" th:text="${os.key}"></div>
+        <div class="country-percent" th:text="${os.value + '%'}"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 50px" class="section">
+    <h2>User's browser</h2>
+    <div th:each="browser : ${usersByPopularBrowsersPercentage}">
+      <div class="progress-container">
+        <div class="progress-bar" th:style="'width: ' + ${browser.value} + '%;'"></div>
+      </div>
+      <div class="country-bar">
+        <div class="country-name" th:text="${browser.key}"></div>
+        <div class="country-percent" th:text="${browser.value + '%'}"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 50px" class="section">
+    <h2>User's device type</h2>
+    <div th:each="deviceType : ${usersByPopularDeviceTypesPercentage}">
+      <div class="progress-container">
+        <div class="progress-bar" th:style="'width: ' + ${deviceType.value} + '%;'"></div>
+      </div>
+      <div class="country-bar">
+        <div class="country-name" th:text="${deviceType.key}"></div>
+        <div class="country-percent" th:text="${deviceType.value + '%'}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
