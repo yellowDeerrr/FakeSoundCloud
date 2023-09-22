@@ -29,6 +29,10 @@ public class AdminController {
         return "admin/admin";
     }
 
+    @GetMapping("/admin/tables")
+    public String getTables(){
+        return "admin/generalDB";
+    }
 
     @GetMapping("/admin/docs/search")
     public String getDocsForSearch(){

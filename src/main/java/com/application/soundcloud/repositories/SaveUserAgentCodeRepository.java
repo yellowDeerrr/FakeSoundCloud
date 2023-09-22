@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SaveUserAgentCodeRepository extends JpaRepository<SaveUserAgentCode, Long> {
     SaveUserAgentCode findByUserId(UserEntity userId);
+    void deleteByUserId(UserEntity userId);
 }

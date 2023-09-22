@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Змінити запис</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<style>
+    #saveButton{
+        margin-top: 7px;
+        border-radius: 10px;
+        padding: 8px 15px;
+        border: none;
+        background-color: #343a40;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+<body style="background-color: #c8cbff;">
+<div th:if="${!isExist}">
+    <div class="container text-center alert alert-danger" role="alert">
+        <h2>Record is not found</h2>
+    </div>
+</div>
+<div th:if="${isExist}">
+    <div class="container mt-5">
+        <h1 class="mb-4">Edit record</h1>
+        <form id="editForm">
+            <div class="mb-3">
+                <label for="usernameInput" class="form-label">Username:</label>
+                <input type="text" class="form-control" id="usernameInput" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="loginInput" class="form-label">Login:</label>
+                <input type="text" class="form-control" id="loginInput" name="login">
+            </div>
+            <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
+        </form>
+
+        <h2 class="mt-5">Старий запис</h2>
+        <div class="bg-white p-3">
+            <p><strong>ID:</strong> <span id="oldId" th:text="${userRecord.get().id}"></span></p>
+            <p><strong>Username:</strong> <span id="oldUsername" th:text="${userRecord.get().username}"></span></p>
+            <p><strong>Login:</strong> <span id="oldLogin" th:text="${userRecord.get().login}"></span></p>
+            <p><strong>Email:</strong> <span id="oldEmail" th:text="${userRecord.get().email}"></span></p>
+            <p><strong>Avatar url:</strong> <span id="oldAvatarUrl" th:text="${userRecord.get().avatarUrl}"></span></p>
+            <p><strong>Create at:</strong> <span id="oldCreateAt" th:text="${userRecord.get().createdAt}"></span></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const saveButton = document.getElementById('saveButton');
+
+        saveButton.addEventListener('click', async function() {
+            const id = document.getElementById('oldId').textContent;
+            const username = document.getElementById('usernameInput').value;
+            const login = document.getElementById("loginInput").value;
+
+            const data = {
+                id: id,
+                username: username || null,
+                login: login || null,
+            };
+
+            try {
+                const response = await fetch(`/admin/tables/general/users/edit`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert('Зміни збережено успішно.');
+                } else {
+                    alert('Помилка при збереженні змін.');
+                }
+            } catch (error) {
+                console.error('Помилка:', error);
+                alert('Помилка при збереженні змін.');
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

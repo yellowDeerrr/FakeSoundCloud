@@ -1,24 +1,20 @@
-package com.application.soundcloud.controllers.admin.logs;
+package com.application.soundcloud.controllers.admin.tables.logs;
 
 import com.application.soundcloud.repositories.logs.BackendLogRepository;
 import com.application.soundcloud.security.CustomUserDetails;
 import com.application.soundcloud.services.logs.SqlQueryLogService;
 import com.application.soundcloud.tables.logs.BackendLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin/logs")
+@RequestMapping("/admin/tables/logs")
 public class BackendLogsController {
     @Autowired
     private BackendLogRepository backendLogRepository;
@@ -28,7 +24,22 @@ public class BackendLogsController {
     public String getBackendLogs(Model model){
         model.addAttribute("table", backendLogRepository.findAll());
 
-        return "admin/logs/backend";
+        return "admin/tables/logs/backend/backend";
+    }
+
+    @GetMapping("/backend/edit")
+    public String editRecordPage(Model model, @RequestParam Long id){
+        Optional<BackendLog> backendLog = backendLogRepository.findById(id);
+
+        if (backendLog.isPresent()){
+            model.addAttribute("isExist", true);
+            model.addAttribute("newBackendLogRecord", new BackendLog());
+            model.addAttribute("backendLogRecord", backendLog);
+        }else{
+            model.addAttribute("isExist", false);
+        }
+
+        return "admin/tables/logs/backend/editPage";
     }
 
     @DeleteMapping("/backend/delete")
