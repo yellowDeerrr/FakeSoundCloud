@@ -31,11 +31,21 @@ public class AdminController {
 
     @GetMapping("/admin/tables")
     public String getTables(){
+        return "admin/chooseTables";
+    }
+
+    @GetMapping("/admin/tables/general")
+    public String getGeneralTables(){
         return "admin/generalDB";
+    }
+
+    @GetMapping("/admin/tables/logs")
+    public String getLogsTables(){
+        return "admin/logs";
     }
 
     @GetMapping("/admin/docs/search")
     public String getDocsForSearch(){
-        return "admin/logs/docsForSearch";
+        return "admin/tables/docsForSearch";
     }
 }

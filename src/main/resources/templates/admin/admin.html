@@ -3,39 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin Page</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
-    .container {
-      display: flex;
-      justify-content: space-between; /* Вирівнює елементи по краях контейнера */
-    }
-
-    .section {
-      flex: 1; /* Розширює секції на всю доступну ширину контейнера */
-      padding: 20px;
-    }
-
-    .country-bar {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 10px;
-    }
-
-    .country-name {
-      width: 150px;
-    }
-    .country-percent {
-      width: 50px;
-    }
-
-    .progress-container {
-      width: 300px;
-      background-color: #ccc;
-    }
-
     .progress-bar {
       height: 30px;
       width: 0;
-      background-color: red;
+      background-color: #007BFF;
       transition: width 0.5s ease-in-out;
     }
 
@@ -55,60 +28,64 @@
     }
   </style>
 </head>
-<body>
-<h1>Admin Page</h1>
-<a href="/admin/tables">Users, Roles, Tracks etc</a>
-<a href="/admin/tables">Logs</a>
 
-<div class="container">
-  <div style="margin-top: 25px;" class="section">
-  <h2>User's country</h2>
-  <div th:each="country : ${usersByCountryPercentage}">
-    <div class="progress-container">
-      <div class="progress-bar" th:style="'width: ' + ${country.value} + '%;'"></div>
-    </div>
-    <div class="country-bar">
-      <div class="country-name" th:text="${country.key}">Country</div>
-      <div class="country-percent" th:text="${country.value + '%'}">Percent</div>
+<body style="background-color: #c8cbff;">
+<div class="container-fluid">
+  <h1 class="mt-4">Admin Page</h1>
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <a href="/admin/tables" class="btn btn-dark btn-sm">Tables</a>
     </div>
   </div>
-</div>
-
-  <div style="margin-top: 50px" class="section">
-    <h2>User's operation system</h2>
-    <div th:each="os : ${usersByOperatingSystemGroupPercentage}">
-      <div class="progress-container">
-        <div class="progress-bar" th:style="'width: ' + ${os.value} + '%;'"></div>
-      </div>
-      <div class="country-bar">
-        <div class="country-name" th:text="${os.key}"></div>
-        <div class="country-percent" th:text="${os.value + '%'}"></div>
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h2>User's country</h2>
+      <div th:each="country : ${usersByCountryPercentage}">
+        <div class="progress mt-2">
+          <div class="progress-bar" th:style="'width: ' + ${country.value} + '%;'"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div th:text="${country.key}">Country</div>
+          <div th:text="${country.value + '%'}">Percent</div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div style="margin-top: 50px" class="section">
-    <h2>User's browser</h2>
-    <div th:each="browser : ${usersByPopularBrowsersPercentage}">
-      <div class="progress-container">
-        <div class="progress-bar" th:style="'width: ' + ${browser.value} + '%;'"></div>
-      </div>
-      <div class="country-bar">
-        <div class="country-name" th:text="${browser.key}"></div>
-        <div class="country-percent" th:text="${browser.value + '%'}"></div>
+    <div class="col-md-6">
+      <h2>User's operation system</h2>
+      <div th:each="os : ${usersByOperatingSystemGroupPercentage}">
+        <div class="progress mt-2">
+          <div class="progress-bar" th:style="'width: ' + ${os.value} + '%;'"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div th:text="${os.key}"></div>
+          <div th:text="${os.value + '%'}"></div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div style="margin-top: 50px" class="section">
-    <h2>User's device type</h2>
-    <div th:each="deviceType : ${usersByPopularDeviceTypesPercentage}">
-      <div class="progress-container">
-        <div class="progress-bar" th:style="'width: ' + ${deviceType.value} + '%;'"></div>
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h2>User's browser</h2>
+      <div th:each="browser : ${usersByPopularBrowsersPercentage}">
+        <div class="progress mt-2">
+          <div class="progress-bar" th:style="'width: ' + ${browser.value} + '%;'"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div th:text="${browser.key}"></div>
+          <div th:text="${browser.value + '%'}"></div>
+        </div>
       </div>
-      <div class="country-bar">
-        <div class="country-name" th:text="${deviceType.key}"></div>
-        <div class="country-percent" th:text="${deviceType.value + '%'}"></div>
+    </div>
+    <div class="col-md-6">
+      <h2>User's device type</h2>
+      <div th:each="deviceType : ${usersByPopularDeviceTypesPercentage}">
+        <div class="progress mt-2">
+          <div class="progress-bar" th:style="'width: ' + ${deviceType.value} + '%;'"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div th:text="${deviceType.key}"></div>
+          <div th:text="${deviceType.value + '%'}"></div>
+        </div>
       </div>
     </div>
   </div>
