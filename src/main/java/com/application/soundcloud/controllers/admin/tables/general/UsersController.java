@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/tables/general")
-public class Users {
+public class UsersController {
     @Autowired
     private UserRepository userRepository;
     @Autowired

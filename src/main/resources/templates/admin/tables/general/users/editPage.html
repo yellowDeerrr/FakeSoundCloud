@@ -38,13 +38,13 @@
         </form>
 
         <h2 class="mt-5">Старий запис</h2>
-        <div class="bg-white p-3">
-            <p><strong>ID:</strong> <span id="oldId" th:text="${userRecord.get().id}"></span></p>
-            <p><strong>Username:</strong> <span id="oldUsername" th:text="${userRecord.get().username}"></span></p>
-            <p><strong>Login:</strong> <span id="oldLogin" th:text="${userRecord.get().login}"></span></p>
-            <p><strong>Email:</strong> <span id="oldEmail" th:text="${userRecord.get().email}"></span></p>
-            <p><strong>Avatar url:</strong> <span id="oldAvatarUrl" th:text="${userRecord.get().avatarUrl}"></span></p>
-            <p><strong>Create at:</strong> <span id="oldCreateAt" th:text="${userRecord.get().createdAt}"></span></p>
+        <div class="bg-white p-3" th:each="oldRecord : ${userRecord}">
+            <p><strong>ID:</strong> <span id="oldId" th:text="${oldRecord.get().id}"></span></p>
+            <p><strong>Username:</strong> <span id="oldUsername" th:text="${oldRecord.get().username}"></span></p>
+            <p><strong>Login:</strong> <span id="oldLogin" th:text="${oldRecord.get().login}"></span></p>
+            <p><strong>Email:</strong> <span id="oldEmail" th:text="${oldRecord.get().email}"></span></p>
+            <p><strong>Avatar url:</strong> <span id="oldAvatarUrl" th:text="${oldRecord.get().avatarUrl}"></span></p>
+            <p><strong>Create at:</strong> <span id="oldCreateAt" th:text="${oldRecord.get().createdAt}"></span></p>
         </div>
     </div>
 

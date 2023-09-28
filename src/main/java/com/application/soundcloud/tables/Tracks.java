@@ -8,10 +8,10 @@ import java.sql.Timestamp;
 public class Tracks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String songName;
     private String author;
-    private int likes;
+    private Long likes;
     private Timestamp date;
     private String songKey; // for identification song in playlist (songs haven't unique name solution - key)
     private String songUrl;
@@ -20,7 +20,7 @@ public class Tracks {
     public Tracks() {
     }
 
-    public Tracks(String songName, String author, int likes, Timestamp date, String songKey, String songUrl, String avatarSongUrl) {
+    public Tracks(String songName, String author, Long likes, Timestamp date, String songKey, String songUrl, String avatarSongUrl) {
         this.songName = songName;
         this.author = author;
         this.likes = likes;
@@ -30,11 +30,11 @@ public class Tracks {
         this.avatarSongUrl = avatarSongUrl;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,11 +54,11 @@ public class Tracks {
         this.author = author;
     }
 
-    public int getLikes() {
+    public Long getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Long likes) {
         this.likes = likes;
     }
 

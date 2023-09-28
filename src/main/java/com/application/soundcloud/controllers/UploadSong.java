@@ -67,7 +67,6 @@ public class UploadSong {
             return "redirect:/error";
         }
 
-        // Додайте інші необхідні дані з об'єкта CustomUserDetails
         Tracks checkTrack = tracksRepository.findByAuthorAndSongName(nameAuthor, nameSong);
         if (checkTrack == null) {
             String avatarSongKey = songService.generateKey();
@@ -95,7 +94,7 @@ public class UploadSong {
                     Files.write(pathToSong, bytesOfSong);
                     Files.write(pathToAvatarSong, bytesOfAvatarSong);
 
-                    Tracks newTrack = new Tracks(nameSong, nameAuthor, 0, new Timestamp(System.currentTimeMillis()), songKey, songKeyWithExtensionSong, avatarSongKeyWithExtension);
+                    Tracks newTrack = new Tracks(nameSong, nameAuthor, 0L, new Timestamp(System.currentTimeMillis()), songKey, songKeyWithExtensionSong, avatarSongKeyWithExtension);
                     tracksRepository.save(newTrack);
                     model.addAttribute("message", "Successful");
                 } else {
