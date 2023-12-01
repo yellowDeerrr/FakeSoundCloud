@@ -28,6 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String loginOrEmail = authentication.getName();
         String password = authentication.getCredentials().toString();
+        System.out.println(loginOrEmail+password+"                                                                                                                               ");
 
         if (loginOrEmail.matches(emailRegex)){
             userEntity = userRepository.findByEmail(loginOrEmail);

@@ -102,6 +102,8 @@ public class RegisterController {
         userEntity.setUrlActivationCode(UUID.randomUUID().toString());
         userEntity.setActivationCode(userService.generateFiveDigitNumber());
 
+        userEntity.setUUID(UUID.randomUUID().toString());
+
         Role roles = roleRepository.findByName("ROLE_USER").get();
         userEntity.setRoles(Collections.singletonList(roles));
 

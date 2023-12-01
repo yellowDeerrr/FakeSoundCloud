@@ -2,8 +2,11 @@ package com.application.soundcloud.services;
 
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.repositories.analytic.UserAgentRepository;
+import com.application.soundcloud.security.jwt.JwtUtils;
 import com.application.soundcloud.tables.UserEntity;
 import com.application.soundcloud.tables.analytic.UserAgentEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,10 +28,17 @@ public class UserService {
     @Value("${pathToSoundCloudFiles}")
     private String path;
 
+
     @Autowired
     public UserService(UserRepository userRepository, MailSenderService mailSenderService) {
         this.userRepository = userRepository;
         this.mailSenderService = mailSenderService;
+    }
+
+    public boolean checkUUID(String UUID){
+        Optional<UserEntity> userEntity = userRepository.findByUUID(UUID);
+
+        return userEntity.isPresent();
     }
 
     public int generateFiveDigitNumber() {

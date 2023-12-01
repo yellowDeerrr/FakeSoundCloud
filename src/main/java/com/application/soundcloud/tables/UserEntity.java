@@ -11,6 +11,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String UUID; // unique user's id
     private String username;
     private String login;
     private String password;
@@ -32,6 +33,14 @@ public class UserEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public String getUsername() {
@@ -106,7 +115,6 @@ public class UserEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
 
     public List<Role> getRoles() {
         return roles;

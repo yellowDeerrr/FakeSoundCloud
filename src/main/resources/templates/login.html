@@ -18,8 +18,8 @@
     </div>
     <div th:if="${loginError}" class="alert alert-danger" role="alert">Wrong userEntity or password <br>if you didn't activate your email, check your email</div>
 
-    <form th:action="'/login'"
-          method="post" style="max-width: 600px; margin: 0 auto;">
+<!--    <form th:action="'/api/auth/signin'"-->
+<!--          method="post" style="max-width: 600px; margin: 0 auto;">-->
         <div class="m-3">
             <div class="form-group row">
                 <label class="col-4 col-form-label">Login Or Email: </label>
@@ -42,20 +42,54 @@
             </div>
 
             <div>
-                <button type="submit" class="btn btn-primary">Log in</button>
+                <button type="submit" class="btn btn-primary" onclick="logIn(this);">Log in</button>
             </div>
 
             <div class="container">
                 <h2 class="form-signin-heading">Login with OAuth 2.0</h2>
                 <table class="table table-striped">
                     <tbody>
-                    <tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/github'">GitHub</a></td></tr>
                     <tr><td><a th:href="${@environment.getProperty('url')} + 'oauth2/authorization/google'">Google</a></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </form>
+<!--    </form>-->
 </div>
+<script>
+    function logIn(button) {
+        // Get values from input fields
+        var username = document.querySelector('input[name="username"]').value;
+        var password = document.querySelector('input[name="password"]').value;
+
+        // Prepare the JSON payload
+        var data = {
+            "username": username,
+            "password": password
+        };
+
+        // Make an AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/auth/signin", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        // Handle the response
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Successful login, handle the response as needed
+                    window.location.href = '/login-successful';
+                } else {
+                    // Handle login error
+                    const errorMessage = xhr.text();
+                    $('#error-message').text(errorMessage);
+                }
+            }
+        };
+
+        // Convert the data object to JSON and send the request
+        xhr.send(JSON.stringify(data));
+    }
+</script>
 </body>
 </html>

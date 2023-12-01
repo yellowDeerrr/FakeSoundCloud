@@ -8,15 +8,10 @@ public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String loginUser;
+    private String UUID;
     private String songKey;
 
     public Likes() {
-    }
-
-    public Likes(String id_user, String songKey) {
-        this.loginUser = id_user;
-        this.songKey = songKey;
     }
 
     public int getId() {
@@ -27,12 +22,12 @@ public class Likes {
         this.id = id;
     }
 
-    public String getLoginUser() {
-        return loginUser;
+    public String getUUID() {
+        return UUID;
     }
 
-    public void setLoginUser(String loginUser) {
-        this.loginUser = loginUser;
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public String getSongKey() {

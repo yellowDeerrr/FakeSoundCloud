@@ -2,6 +2,7 @@ package com.application.soundcloud.controllers;
 
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
+import com.application.soundcloud.security.CustomUserDetails;
 import com.application.soundcloud.services.SongService;
 import com.application.soundcloud.tables.Tracks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class UploadSong {
         if (principal instanceof OAuth2User){
             OAuth2User oAuth2User = (OAuth2User) principal;
             nameAuthor = userRepository.findByEmail(oAuth2User.getAttribute("email")).getUsername();
-        } else if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
+        } else if (principal instanceof CustomUserDetails) {
+            UserDetails userDetails = (CustomUserDetails) principal;
             nameAuthor = userDetails.getUsername();
         }else{
             return "redirect:/error";

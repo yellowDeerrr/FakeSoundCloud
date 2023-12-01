@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Мій сайт</title>
+  <meta charset="UTF-8">
+  <title>Song</title>
   <style>
     .container {
       display: flex;
@@ -68,34 +69,66 @@
       cursor: pointer;
       margin-top: 5px;
     }
-    .likeButton.like {
-      background-color: red;
-    }
-    .likeButton.unlike {
-      background-color: gray;
-    }
   </style>
   <script>
-    function likeButtonClick(button) {
-      var songKey = button.dataset.songKey;
-      var likeStatus = button.classList.contains("like");
-      // Send an AJAX request to update the like status
+    document.addEventListener("DOMContentLoaded", async () => {
+      const likeBut = document.getElementById('likeBut');
+      const songKey = likeBut.getAttribute('data-song-key');
+
+      // Make an AJAX request
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/update-like-status", true);
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.open("GET", `/getLikeStatus?songKey=${encodeURIComponent(songKey)}`, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      // Handle the response
       xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          // Update the button class to reflect the new like status
-          if (likeStatus) {
-            button.classList.remove("like");
-            button.classList.add("unlike");
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            const likeStatus = xhr.responseText; // Get the response text
+            alert('Зміни збережено успішно.');
+
+            const likeText = likeBut.querySelector('.likeButtonText');
+            if (likeStatus === "like") {
+              likeText.textContent = "You have been liked";
+            } else {
+              likeText.textContent = "Ти забрав лайк";
+            }
           } else {
-            button.classList.remove("unlike");
-            button.classList.add("like");
+            alert('Помилка при збереженні змін.');
           }
         }
       };
-      xhr.send("songKey=" + encodeURIComponent(songKey) + "&likeStatus=" + encodeURIComponent(likeStatus));
+
+      // No need to send a request body for a GET request
+      xhr.send();
+    });
+  </script>
+  <script>
+    async function likeButtonClick(){
+      const likeBut = document.getElementById('likeBut');
+      const songKey = likeBut.getAttribute('data-song-key');
+      const data = {
+        "songKey": songKey
+      };
+
+      // Make an AJAX request
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/updateLikeStatus", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      // Handle the response
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert('Зміни збережено успішно.');
+          } else {
+            alert('Помилка при збереженні змін.');
+          }
+        }
+      };
+
+      // Convert the data object to JSON and send the request
+      xhr.send(JSON.stringify(data));
     }
   </script>
 </head>
@@ -108,8 +141,9 @@
     <div class="text">
       <h3 th:text="${song.songName}" class="songName"></h3>
       <a th:text="${song.author}" th:href="@{'/@' + ${song.author}}" class="author"></a>
-      <p th:text="'♡' + ${song.likes}" class="symbolLike"></p>
-      <div class="likeButton like" data-song-key="${song.songKey}" onclick="likeButtonClick(this);">❤️</div>
+      <div class="likeButton like" id="likeBut" th:attr="data-song-key=${song.songKey}" onclick="likeButtonClick(this);">
+        <span class="likeButtonText">❤️</span>
+      </div>
     </div>
   </div>
   <div class="container player">
