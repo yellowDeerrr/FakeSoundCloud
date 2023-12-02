@@ -21,13 +21,11 @@ import java.util.Map;
 public class LikeController {
     @Autowired
     private LikesService likesService;
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 
     @GetMapping("/getLikeStatus")
     public ResponseEntity<String> getLikeStatus(@RequestParam String songKey, Authentication authentication) {
         String UUID = null;
-        logger.error(songKey);
 
         Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails customUserDetails) {

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LikesService {
@@ -21,7 +21,6 @@ public class LikesService {
     private TracksRepository tracksRepository;
     @Autowired
     private UserService userService;
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     public String getLikeStatus(String songKey, String UUID){
         if (userService.checkUUID(UUID) && tracksRepository.existsBySongKey(songKey)){
@@ -59,5 +58,19 @@ public class LikesService {
             likesRepository.save(newLike);
             return "saved";
         }
+    }
+
+    public ArrayList<Tracks> getUserLikes(String UUID){
+        ArrayList<Tracks> tracksList = new ArrayList<>();
+        List<Likes> likes = likesRepository.findByUUID(UUID);
+        for (Likes like : likes){
+            Tracks track = tracksRepository.findBySongKey(like.getSongKey());
+            if (track != null){
+                tracksList.add(track);
+            }
+
+        }
+
+        return tracksList;
     }
 }

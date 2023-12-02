@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.application</groupId>
     <artifactId>SoundCloud</artifactId>
-    <version>0.1.10-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     <name>SoundCloud</name>
     <description>SoundCloud</description>
     <properties>

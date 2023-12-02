@@ -61,13 +61,13 @@
     }
 </style>
 <body>
-<div th:each="userEntity : ${userEntity}" th:switch="${userAvatar}">
-    <img th:case="'ownUserAvatar'" th:src="${userEntity.avatarUrl}" class="avatar">
-    <img th:case="'userOauth2Avatar'" th:src="${userEntity.avatarUrl}" class="avatar">
-    <img th:case="'standard'" th:src="${@environment.getProperty('url')} + 'files/avatar/standard/KpH8YmV4eT.jpg'" class="avatar">
-    <h1 th:text="${userEntity.username}" class="font" id="accountName"></h1>
-    <a th:if="${ownAccount}" href="/you/likes" class="songName">Likes</a>
-</div>
+<!--<div th:each="userEntity : ${userEntity}" th:switch="${userAvatar}">-->
+<!--    <img th:case="'ownUserAvatar'" th:src="${userEntity.avatarUrl}" class="avatar">-->
+<!--    <img th:case="'userOauth2Avatar'" th:src="${userEntity.avatarUrl}" class="avatar">-->
+<!--    <img th:case="'standard'" th:src="${@environment.getProperty('url')} + 'files/avatar/standard/KpH8YmV4eT.jpg'" class="avatar">-->
+<!--    <h1 th:text="${userEntity.username}" class="font" id="accountName"></h1>-->
+<!--    <a th:if="${ownAccount}" href="/you/likes" class="songName">Likes</a>-->
+<!--</div>-->
 <div class="thumb">
     <figure th:each="song : ${songs}">
         <a th:href="@{'/@' + ${song.author} + '/' + ${song.songName}}">

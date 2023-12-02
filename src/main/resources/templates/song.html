@@ -75,31 +75,27 @@
       const likeBut = document.getElementById('likeBut');
       const songKey = likeBut.getAttribute('data-song-key');
 
-      // Make an AJAX request
       var xhr = new XMLHttpRequest();
       xhr.open("GET", `/getLikeStatus?songKey=${encodeURIComponent(songKey)}`, true);
       xhr.setRequestHeader("Content-Type", "application/json");
 
-      // Handle the response
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-            const likeStatus = xhr.responseText; // Get the response text
-            alert('Зміни збережено успішно.');
+            const likeStatus = xhr.responseText;
 
             const likeText = likeBut.querySelector('.likeButtonText');
             if (likeStatus === "like") {
-              likeText.textContent = "You have been liked";
+              likeText.textContent = "❤️";
             } else {
-              likeText.textContent = "Ти забрав лайк";
+              likeText.textContent = "❤";
             }
           } else {
-            alert('Помилка при збереженні змін.');
+            alert('Error');
           }
         }
       };
 
-      // No need to send a request body for a GET request
       xhr.send();
     });
   </script>
@@ -116,18 +112,22 @@
       xhr.open("POST", "/updateLikeStatus", true);
       xhr.setRequestHeader("Content-Type", "application/json");
 
-      // Handle the response
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-            alert('Зміни збережено успішно.');
-          } else {
-            alert('Помилка при збереженні змін.');
+            const likeText = likeBut.querySelector('.likeButtonText');
+            if (xhr.responseText === "saved"){
+              likeText.textContent = "❤️";
+            }else if (xhr.responseText === "deleted"){
+              likeText.textContent = "❤"
+            }
+          }
+          else {
+            alert('Error');
           }
         }
       };
 
-      // Convert the data object to JSON and send the request
       xhr.send(JSON.stringify(data));
     }
   </script>
@@ -142,7 +142,7 @@
       <h3 th:text="${song.songName}" class="songName"></h3>
       <a th:text="${song.author}" th:href="@{'/@' + ${song.author}}" class="author"></a>
       <div class="likeButton like" id="likeBut" th:attr="data-song-key=${song.songKey}" onclick="likeButtonClick(this);">
-        <span class="likeButtonText">❤️</span>
+        <span class="likeButtonText"></span>
       </div>
     </div>
   </div>

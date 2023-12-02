@@ -60,31 +60,21 @@
 <div class="nav-links">
     <a th:if="${not isAuthenticated}" href="/login" class="author">Log In</a>
     <a th:if="${not isAuthenticated}" href="/register" class="author">Sign Up</a>
-    <!-- ... (your existing HTML) ... -->
 
     <a th:if="${isAuthenticated}" href="javascript:void(0);" onclick="logout()">Log Out</a>
 
     <script>
         function logout() {
-            // Create a form element
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '/api/auth/signout';
 
-            // Add a CSRF token if needed (replace 'csrfToken' with the actual attribute name)
-            // const csrfToken = document.getElementsByName('_csrf')[0].value;
-            // const csrfParameter = document.getElementsByName('_csrf_parameter')[0].value;
-            // form.innerHTML += `<input type="hidden" name="${csrfParameter}" value="${csrfToken}" />`;
-
-            // Append the form to the document
             document.body.appendChild(form);
 
-            // Submit the form
             form.submit();
         }
     </script>
 
-    <!-- ... (your existing HTML) ... -->
     <a href="/new/song" class="author">Upload Song</a>
     <a href="/you" class="author">Your account</a>
 </div>

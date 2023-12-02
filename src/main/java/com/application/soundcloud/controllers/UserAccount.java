@@ -3,6 +3,8 @@ package com.application.soundcloud.controllers;
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.security.CustomUserDetails;
+import com.application.soundcloud.services.LikesService;
+import com.application.soundcloud.tables.Likes;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,11 +26,13 @@ public class UserAccount {
     private TracksRepository tracksRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LikesService likesService;
     @Value("${url}")
     private String url;
 
     @GetMapping("/@{accountName}")
-    public String getPageAccountName(@PathVariable String accountName, Model model){
+    public String getPageAccountName(@PathVariable String accountName, Authentication authentication, Model model){
         List<Tracks> tracksList = tracksRepository.findByAuthor(accountName);
         UserEntity userEntity = userRepository.findByUsername(accountName);
 
@@ -45,6 +50,9 @@ public class UserAccount {
             } else{
                 model.addAttribute("nullSong", "Author hasn't songs");
             }
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+            model.addAttribute("ownAccount", customUserDetails.getUsername().equals(accountName));
         }else{
             model.addAttribute("errorMessage", "Account isn't exist");
         }
@@ -56,10 +64,6 @@ public class UserAccount {
     @GetMapping("/you")
     public String viewYourAccount(Authentication authentication) {
         UserEntity userEntity;
-        if (authentication == null || !authentication.isAuthenticated()) {
-            // Redirect to the homepage if the user is not authenticated
-            return "redirect:/";
-        }
 
         Object principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User) {
@@ -82,5 +86,15 @@ public class UserAccount {
         } else {
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/you/likes")
+    public String getUserLikes(Authentication authentication, Model model){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        ArrayList<Tracks> userLikes = likesService.getUserLikes(customUserDetails.getUserEntity().getUUID());
+        model.addAttribute("songs", userLikes);
+
+        return "userLikes";
     }
 }
