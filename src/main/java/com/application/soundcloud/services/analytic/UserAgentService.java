@@ -34,8 +34,8 @@ public class UserAgentService {
         userAgentEntity.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 
         userAgentEntity.setUserId(userEntity);
-//          userAgentEntity.setCountry(geoIpService.getCountryNameByIp(remoteAddr));
-        userAgentEntity.setCountry("USA");
+        userAgentEntity.setCountry(geoIpService.getCountryNameByIp(remoteAddr));
+//        userAgentEntity.setCountry("USA");
         userAgentEntity.setTime(LocalDateTime.now());
 
         userAgentRepository.save(userAgentEntity);

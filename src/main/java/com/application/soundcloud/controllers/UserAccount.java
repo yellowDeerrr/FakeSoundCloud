@@ -4,7 +4,9 @@ import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.security.CustomUserDetails;
 import com.application.soundcloud.services.LikesService;
+import com.application.soundcloud.services.PlaylistsService;
 import com.application.soundcloud.tables.Likes;
+import com.application.soundcloud.tables.Playlists;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class UserAccount {
     private UserRepository userRepository;
     @Autowired
     private LikesService likesService;
+    @Autowired
+    private PlaylistsService playlistsService;
     @Value("${url}")
     private String url;
 
@@ -96,5 +100,15 @@ public class UserAccount {
         model.addAttribute("songs", userLikes);
 
         return "userLikes";
+    }
+
+    @GetMapping("/you/playlists")
+    public String getUserPlaylists(Authentication authentication, Model model){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        List<Playlists> userPlaylists = playlistsService.getUserPlaylists(customUserDetails.getUserEntity().getUUID());
+        model.addAttribute("userPlaylists", userPlaylists);
+
+        return "userPlaylists";
     }
 }

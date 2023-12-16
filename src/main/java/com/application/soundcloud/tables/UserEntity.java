@@ -16,6 +16,7 @@ public class UserEntity {
     private String login;
     private String password;
     private String email;
+    private String privateAccount;
     private String urlActivationCode;
     private Integer activationCode;
     private String urlActivationCodeForResetPassword;
@@ -75,6 +76,13 @@ public class UserEntity {
         this.email = email;
     }
 
+    public String getPrivateAccount() {
+        return privateAccount;
+    }
+
+    public void setPrivateAccount(String privateAccount) {
+        this.privateAccount = privateAccount;
+    }
 
     public String getAvatarUrl() {
         return avatarUrl;

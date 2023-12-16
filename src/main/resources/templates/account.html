@@ -66,7 +66,10 @@
     <img th:case="'userOauth2Avatar'" th:src="${userEntity.avatarUrl}" class="avatar">
     <img th:case="'standard'" th:src="${@environment.getProperty('url')} + 'files/avatar/standard/KpH8YmV4eT.jpg'" class="avatar">
     <h1 th:text="${userEntity.username}" class="font" id="accountName"></h1>
-    <a th:if="${ownAccount}" href="/you/likes" class="songName">Likes</a>
+    <div th:if="${ownAccount}">
+        <a href="/you/likes" class="songName">Likes songs</a>
+        <a href="/you/playlists" class="songName">Playlists</a>
+    </div>
 </div>
 <div class="thumb">
     <figure th:each="song : ${songs}">

@@ -83,8 +83,7 @@ public class RegisterController {
             backendLogService.errorRegisterUser(backendLog);
 
             return "signup_form";
-        }
-        if (avatarFile != null && !avatarFile.isEmpty()){
+        }if (avatarFile != null && !avatarFile.isEmpty()){
             String[] message = userService.checkAvatarAndLoadAvatar(login, avatarFile);
             if (!message[1].equals("successful")){
                 model.addAttribute("errorMessage", message[1]);
@@ -94,7 +93,6 @@ public class RegisterController {
         }else if (avatarFile == null || avatarFile.isEmpty()){
             userEntity.setAvatarUrl(url + "files/avatar/standard/KpH8YmV4eT.jpg");
         }
-
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(encodedPassword);

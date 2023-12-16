@@ -194,4 +194,8 @@ public class UserService {
         }
         return email;
     }
+
+    public Optional<UserEntity> getUserByUUID(String UUID) {
+        return userRepository.findByUUID(UUID);
+    }
 }

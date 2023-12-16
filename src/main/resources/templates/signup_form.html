@@ -55,6 +55,16 @@
             </div>
 
             <div class="form-group row">
+                <label class="col-4 col-form-label">Is Private Account (if yes - other people can't see your like's songs/playlists): </label>
+                <div class="col-8">
+                    <select th:field="*{privateAccount}" class="form-control">
+                        <option th:value="close">Yes</option>
+                        <option th:value="open">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label class="col-4 col-form-label">Avatar: </label>
                 <div class="col-8">
                     <input type="file" name="avatarFile" accept="image/*" class="form-control" />
