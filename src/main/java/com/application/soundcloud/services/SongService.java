@@ -5,7 +5,6 @@ import com.application.soundcloud.tables.Tracks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -15,6 +14,10 @@ public class SongService {
     @Autowired
     public SongService(TracksRepository tracksRepository) {
         this.tracksRepository = tracksRepository;
+    }
+
+    public Tracks getSongByCode(String code){
+        return tracksRepository.findBySongKey(code);
     }
 
     public String generateKey(){

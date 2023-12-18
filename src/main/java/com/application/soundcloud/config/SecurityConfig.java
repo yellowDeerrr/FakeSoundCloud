@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+//                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .authorizeHttpRequests()
                 .antMatchers("/@{accountName}/{songName}", "/new/song", "/login-successful").authenticated()
                 .antMatchers("/", "/@{accountName}", "/register", "/files/**", "/activate/**", "/api/auth/**", "/login", "/login-error").permitAll()

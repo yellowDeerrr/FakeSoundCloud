@@ -10,6 +10,7 @@ public class Playlists {
     private String UUID; // owner of playlist
     private String name;
     private String code;
+    private String shareCode;
 
     public Playlists() {
     }
@@ -43,5 +44,13 @@ public class Playlists {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getShareCode() {
+        return shareCode;
+    }
+
+    public void setShareCode(String shareCode) {
+        this.shareCode = shareCode;
     }
 }

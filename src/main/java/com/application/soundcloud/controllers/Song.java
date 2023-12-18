@@ -4,6 +4,7 @@ import com.application.soundcloud.repositories.LikesRepository;
 import com.application.soundcloud.repositories.TracksRepository;
 import com.application.soundcloud.repositories.UserRepository;
 import com.application.soundcloud.security.CustomUserDetails;
+import com.application.soundcloud.services.PlaylistsService;
 import com.application.soundcloud.tables.Likes;
 import com.application.soundcloud.tables.Tracks;
 import com.application.soundcloud.tables.UserEntity;
@@ -26,6 +27,8 @@ public class Song {
     private UserRepository userRepository;
     @Autowired
     private LikesRepository likesRepository;
+    @Autowired
+    private PlaylistsService playlistsService;
 
     @GetMapping("/@{accountName}/{songName}")
     public String getPageWithSong(@PathVariable String accountName, @PathVariable String songName, Authentication authentication, Model model){
@@ -48,6 +51,8 @@ public class Song {
                     }else{
                         model.addAttribute("like", false);
                     }
+
+                    model.addAttribute("userPlaylists", playlistsService.getUserPlaylists(userDetails.getUserEntity().getUUID()));
                 }
                 model.addAttribute("song", track);
             }else{

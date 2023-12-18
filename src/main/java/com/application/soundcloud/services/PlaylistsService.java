@@ -8,9 +8,7 @@ import com.application.soundcloud.tables.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PlaylistsService {
@@ -24,6 +22,7 @@ public class PlaylistsService {
         playlist.setName(name);
         playlist.setUUID(UUID);
         playlist.setCode(code);
+        playlist.setShareCode(java.util.UUID.randomUUID().toString());
 
         playlistsRepository.save(playlist);
         return code; // code of new playlist
@@ -54,5 +53,9 @@ public class PlaylistsService {
         }
 
         return null;
+    }
+
+    public Optional<Playlists> checkCodeWithShareCode(String code, String shareCode){
+        return playlistsRepository.findByCodeAndShareCode(code, shareCode);
     }
 }

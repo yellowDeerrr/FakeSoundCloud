@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Song</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
     .container {
       display: flex;
@@ -131,6 +136,29 @@
       xhr.send(JSON.stringify(data));
     }
   </script>
+  <script>
+    function addToPlaylist() {
+      const likeBut = document.getElementById('likeBut');
+      const songKey = likeBut.getAttribute('data-song-key');
+      const playlistCode = event.target.getAttribute('data-playlist-code');
+
+      fetch('/playlist/song/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ songKey: songKey, playlistCode: playlistCode }),
+      })
+              .then(response => response.json())
+              .then(data => {
+                // Handle the response if needed
+                console.log('Response:', data);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    }
+  </script>
 </head>
 <body>
 <div th:each="song : ${song}">
@@ -152,6 +180,30 @@
     </audio>
   </div>
 </div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareModal">
+  Add to playlist
+</button>
+
 <p th:text="${errorMessage}"></p>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share this playlist</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="thumb">
+            <figure th:each="playlists : ${userPlaylists}">
+              <figcaption><button th:text="${playlists.name}" th:data-playlist-code="${playlists.code}" onclick="addToPlaylist()" class="btn btn-success"></button></figcaption>
+            </figure>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
